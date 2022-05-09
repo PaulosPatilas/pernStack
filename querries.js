@@ -106,7 +106,7 @@ const deleteEmployee = async(request, response) => {
   
   const loginUser = async(request,response) => {
   
-    console.log("Back End Starts")
+    console.log(process.env.DATABASE_URL)
     const {username, password} = request.body;
   
      await pool.query("SELECT * FROM Users WHERE username = $1;",[username], (error,result) => {
