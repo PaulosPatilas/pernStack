@@ -7,7 +7,7 @@ const cors = require('cors')
 const db = require('./querries')
 const bodyParser = require('body-parser')
 const app = express()
-const port = process.env.PORT || 8080
+var port = process.env.PORT || 8080
 const path = require('path')
 
 
