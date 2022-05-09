@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
+  "engines":{"node": "18.0.0","npm":"8.6.0"},
   "scripts": {
     "start":"node server.js",
-    "heroku-postbuild": "cd ReactProject/my-app/build && npm install && npm run build"
+    "heroku-postbuild": "cd ReactProject/my-app && npm install && npm run build"
   },
   "keywords": [],
   "author": "",
