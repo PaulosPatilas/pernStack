@@ -51,7 +51,7 @@ function EmployeeTable() {
         <EmployeeRow edit={true} id={employee.id} LastName={employee.last_name} FirstName={employee.first_name} BirthDate={employee.date_of_birth.substring(0,10)} is_active={employee.is_active} />
         <ButtonGroup>
          <Button variant='outlined' color='warning' onClick={()=> handleDeleteClick(employee.id)}>Delete</Button>
-         <Button variant='outlined' color='secondary' href={"/employeeupd/" + employee.id}>Update</Button>      
+         <Button variant='outlined' color='secondary' href={"/employees/" + employee.id}>Update</Button>      
         </ButtonGroup>      
         </tr>       
     )});
@@ -62,7 +62,7 @@ function EmployeeTable() {
         My first React-Node CRUD App
       </header>
       <div style={{paddingTop: 10}} className='container'>
-         <Button fullWidth style={{marginBottom: 30}} variant='contained' color='primary' href = {"/createEmployee"}>Add new Employee</Button> 
+         <Button fullWidth style={{marginBottom: 30}} variant='contained' color='primary' href = {"/employees/new"}>Add new Employee</Button> 
         
         <Table  bordered>
         <thead>

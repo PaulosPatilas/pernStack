@@ -52,7 +52,7 @@ app.put('/api/employee/:id', validateToken,db.updateEmployee)
 app.delete('/api/employee/:id', validateToken,db.deleteEmployee)
 
 //JWT Login
-app.post('/api/userRegistry', db.createUser)
+app.post('/api/registration', db.createUser)
 app.post('/api/login', db.loginUser)
 app.get('/api/isUserAuth',validateToken,db.validateAuth)
 

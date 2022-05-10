@@ -16,9 +16,9 @@ function App() {
     <UserContext.Provider value={{ user, setUser }}>
     <div className="App">
       <Routes>
-        <Route exact={true} path='/home' element={<EmployeeTable/>}/>
-        <Route exact={true} path='/employeeupd/:id' element={<EmployeeUpdate/>}/>
-        <Route exact={true} path='/createEmployee' element={<EmployeeAddition/>}/>
+        <Route exact={true} path='/employees' element={<EmployeeTable/>}/>
+        <Route exact={true} path='/employees/:id' element={<EmployeeUpdate/>}/>
+        <Route exact={true} path='/employees/new' element={<EmployeeAddition/>}/>
         <Route exact={true} path='/registration' element={<Registration/>}/>
         <Route exact={true} path='/' element={<Login/>}/>
         <Route

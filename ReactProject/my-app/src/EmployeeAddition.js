@@ -89,7 +89,7 @@ function EmployeeAddition() {
             </FormGroup>
             <FormGroup>
               <Button className='Add-Button' variant='contained' color="primary" type="submit">Add</Button>
-              <Button variant='outlined' color="secondary" href="/home">Cancel</Button>
+              <Button variant='outlined' color="secondary" href="/employees">Cancel</Button>
             </FormGroup>
           </Form>
         </Container>       

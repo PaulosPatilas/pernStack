@@ -73,7 +73,7 @@ function Login(){
             </Form>
             <p>Not registered yet? <a href='/registration'> Do It Now!</a></p>
 
-            {isLogged && <Button href='/home'>Check if Authenticated </Button>}
+            {isLogged && <Button href='/employees'>Check if Authenticated </Button>}
             </Container>         
         </div>
     )

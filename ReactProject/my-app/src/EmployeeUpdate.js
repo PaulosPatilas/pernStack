@@ -124,7 +124,7 @@ function EmployeeUpdate() {
             </FormGroup>
             <FormGroup>
               <Button variant="contained"  color="primary"   type="submit">Save</Button>{/*href="/home" if i href this button submit doesnt work*/}
-              <Button variant="outlined"  color="secondary" href={"/home"}>Cancel</Button>
+              <Button variant="outlined"  color="secondary" href={"/employees"}>Cancel</Button>
             </FormGroup>
           </Form>
         </Container>
