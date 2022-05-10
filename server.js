@@ -58,7 +58,7 @@ app.get('/api/isUserAuth',validateToken,db.validateAuth)
 
 //Wildcard redirects 
 app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, '/build/index.html'),function(err) {
+  res.sendFile(path.join(__dirname, 'ReactProject/my-app/build/index.html'),function(err) {
     if (err) {
       res.status(500).send(__dirname)
     }
