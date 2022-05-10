@@ -18,7 +18,9 @@ const devConfig = {
 //Production enviroment configuration
 const prodConfig = {
   connectionString: process.env.DATABASE_URL ,
-  ssl:'true' 
+  ssl: {
+    rejectUnauthorized: false
+  } 
   // This is coming from Heroku addon for postgresql
 }
 
