@@ -99,7 +99,7 @@ const deleteEmployee = async(request, response) => {
     const {username,password} = request.body
     bcrypt.hash(password,10).then(async (hash) => { 
       console.log(hash + "  " +password)
-      await pool.query('INSERT INTO Users VALUES(1,$1,$2)',[username,hash],(error,results) =>{
+      await pool.query('INSERT INTO Users VALUES($1,$2)',[username,hash],(error,results) =>{
         if (error) {
           throw error
         }
