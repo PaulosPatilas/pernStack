@@ -55,3 +55,12 @@ app.delete('/api/employee/:id', validateToken,db.deleteEmployee)
 app.post('/api/userRegistry', db.createUser)
 app.post('/api/login', db.loginUser)
 app.get('/api/isUserAuth',validateToken,db.validateAuth)
+
+//Wildcard redirects 
+app.get('*', function(req, res) {
+  res.sendFile(path.join(__dirname, '/build/index.html'),function(err) {
+    if (err) {
+      res.status(500).send(__dirname)
+    }
+  })
+})
