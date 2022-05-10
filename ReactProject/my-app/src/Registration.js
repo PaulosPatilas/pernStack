@@ -10,7 +10,7 @@ function Registration(){
     
     async function handleSubmit(){
 
-      await fetch('api/userRegistry',
+      await fetch('/api/userRegistry',
       {
        // mode:'cors',
         method: 'POST',
