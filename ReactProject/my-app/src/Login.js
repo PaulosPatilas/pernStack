@@ -1,8 +1,7 @@
-import React,{useEffect, useState} from 'react';
+import React,{useEffect, useState, useContext} from 'react';
 import {Container, Form, FormGroup, Input, Label} from 'reactstrap';
 import {Button} from "@mui/material"
-
-
+import { UserContext } from "./UserContext";
 
 function Login(){
 
@@ -11,9 +10,10 @@ function Login(){
         password: ""
     });
 
-    const [isLogged,setLogged] = useState(false)
+    const [isLogged,setLogged] = useState(false);
 
-    
+    const  _setUser  = useContext(UserContext);
+
     // var user = {
     //     username: "",
     //     password: ""
@@ -45,6 +45,8 @@ function Login(){
             console.log(data)
             setLogged(data.auth)   
             localStorage.setItem('token', data.token)
+            //localStorage.setItem('user', JSON.stringify(data.result[0]))
+            //_setUser(localStorage.getItem("user"));
         })
         console.log("User log in")
     }

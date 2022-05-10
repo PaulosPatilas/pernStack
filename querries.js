@@ -30,7 +30,9 @@ const pool = new Pool(process.env.NODE_ENV === 'production'? prodConfig : devCon
 //GET all employees
 const getEmployees = async(request, response) => {
     console.log('starting async query')
-    await pool.query('SELECT * FROM Employee ORDER BY id ASC', (error, results) => {
+    console.log(request.userID.id);
+    const user_id = request.userID.id;
+    await pool.query('SELECT * FROM Employee WHERE user_id = $1 ORDER BY id ASC',[user_id], (error, results) => {
       if (error) {
         throw error
       }
@@ -41,8 +43,9 @@ const getEmployees = async(request, response) => {
 
 const getEmployeeById = async(request, response) => {
   const id = parseInt(request.params.id)
+  const user_id = request.userID.id;
   await pool.query(
-    'SELECT * FROM Employee WHERE id = $1' ,[id], (error,results) => {
+    'SELECT * FROM Employee WHERE id = $1 AND user_id = $2' ,[id, user_id], (error,results) => {
       if(error) {
         throw error
       }
@@ -52,16 +55,17 @@ const getEmployeeById = async(request, response) => {
 }
 
 //POST a new employee
- const  createEmployee = async(request, response) => {
-    //We create the body of the request(what we will Post)
-    const { last_name, first_name, is_active, date_of_birth } = request.body
-  
-    await pool.query('INSERT INTO Employee (last_name, first_name, is_active, date_of_birth) VALUES ($1, $2, $3, $4)', [last_name, first_name, is_active, date_of_birth], (error, results) => {
-      if (error) {
-        throw error
-      }
-      response.status(201).send(`User added with ID: ${response.insertId}`)
-    })
+const  createEmployee = async(request, response) => {
+  //We create the body of the request(what we will Post)
+  const { last_name, first_name, is_active, date_of_birth } = request.body
+  console.log(request.userID);
+  const user_id = request.userID.id;
+  await pool.query('INSERT INTO Employee (last_name, first_name, is_active, date_of_birth,user_id) VALUES ($1, $2, $3, $4, $5)', [last_name, first_name, is_active, date_of_birth,user_id], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(201).send(`User added with ID: ${response.insertId}`)
+  })
 }
 
 //UPDATE an existing Employee
@@ -69,10 +73,10 @@ const updateEmployee = async(request, response) => {
     const id = parseInt(request.params.id)
     console.log(id);
     const {last_name, first_name, is_active, date_of_birth } = request.body;
-    console.log(request);
+    const user_id = request.userID.id;
     await pool.query(
-      'UPDATE Employee SET last_name = $1, first_name = $2, is_active = $3, date_of_birth = $4 WHERE id = $5',
-      [last_name, first_name, is_active, date_of_birth, id],
+      'UPDATE Employee SET last_name = $1, first_name = $2, is_active = $3, date_of_birth = $4 WHERE id = $5 AND user_id = $6',
+      [last_name, first_name, is_active, date_of_birth, id,user_id],
       (error, results) => {
         if (error) {
           throw error
@@ -86,7 +90,7 @@ const updateEmployee = async(request, response) => {
 //DELETE an Employee
 const deleteEmployee = async(request, response) => {
     const id = parseInt(request.params.id)
-  
+    const user_id = request.userID.id;
     await pool.query('DELETE FROM Employee WHERE id = $1', [id], (error, results) => {
       if (error) {
         throw error
@@ -94,9 +98,8 @@ const deleteEmployee = async(request, response) => {
       response.status(200).send(`User deleted with ID: ${id}`)
     })
   }
-  const createUser = async(request,response) => {
-    
-    const {username,password} = request.body
+const createUser = async(request,response) => {    
+  const {username,password} = request.body
     bcrypt.hash(password,10).then(async (hash) => { 
       console.log(hash + "  " +password)
       await pool.query('INSERT INTO Users VALUES($1,$2)',[username,hash],(error,results) =>{

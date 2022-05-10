@@ -5,9 +5,15 @@ import EmployeeTable from './EmployeeTable';
 import EmployeeAddition from './EmployeeAddition';
 import Registration from './Registration';
 import Login from './Login';
+import { useState } from 'react';
+import { UserContext } from "./UserContext";
 
 function App() {
+
+  const [user, setUser] = useState(null);
+
   return (
+    <UserContext.Provider value={{ user, setUser }}>
     <div className="App">
       <Routes>
         <Route exact={true} path='/home' element={<EmployeeTable/>}/>
@@ -29,6 +35,7 @@ function App() {
       /> */}
       </Routes>
     </div>
+    </UserContext.Provider>
   );
 }
 
