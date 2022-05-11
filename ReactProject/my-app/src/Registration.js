@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
+import {Button,FormControl, OutlinedInput, InputLabel, Box, InputAdornment } from "@mui/material"
 
 function Registration(){
 
@@ -21,32 +21,48 @@ function Registration(){
   }
 
   function handleChange(event)  {
-    setUser({...user, [event.target.name]:event.target.value})
+    setUser({...user, [event.target.id]:event.target.value})
   }
 
   return(
     <div>
-      <h1 style={{ textAlign: "center" , font:14}}>Add new user</h1>
-      <Container> 
-        <Form onSubmit={(e)=> handleSubmit(e)}>
-          <FormGroup>
-            <Label for="username">Username</Label>
-            <Input type="text" name="username" id="username" value={user.username || ''}
-              onChange={(e) => {handleChange(e)}} autoComplete="username"/>
-          </FormGroup>
-          <FormGroup>
-            <Label for="password">Password</Label>
-            <Input type="password" name="password" id="password" value={user.password || ''}
-              onChange={(e) => {handleChange(e)}} autoComplete="password"/>
-          </FormGroup>          
-          <FormGroup>
-            <Link to='/login'><Button outline color="primary" type="submit">Sign Up</Button></Link>
-            <Link to='/'><Button outline color="secondary">Cancel</Button></Link>
-          </FormGroup>
-        </Form>
-      </Container>
+      <Box
+        component="form"
+        sx={{
+              display:'block',
+              flexDirection:'column',
+              '& .MuiTextField-root': { m: 1, width: '25ch' },
+            }}
+            noValidate
+            autoComplete="off"
+            >   
+            <FormControl margin='dense'>
+                <InputLabel htmlFor="username">Enter Username:</InputLabel>
+                <OutlinedInput
+                    id="username"
+                    value={user.username || ''}
+                    onChange={handleChange}
+                    label="Username"
+                    size='small'
+                    margin='dense'
+                />
+            </FormControl>
+            <FormControl margin='dense'>
+                <InputLabel htmlFor='password'>Enter passsword:</InputLabel>
+                <OutlinedInput
+                    id="password"
+                    type='password'
+                    size='small'
+                    label='Password'
+                    value={user.password || ''}
+                    onChange={handleChange}
+                />
+            </FormControl>
+            </Box> 
+    
+    <Link to='/login'><Button variant='outlined' color="primary" type="submit">Sign Up</Button></Link>
+    <Link to='/'><Button variant='outlined' color="secondary">Cancel</Button></Link>
     </div>
   )
 }
-
 export default Registration

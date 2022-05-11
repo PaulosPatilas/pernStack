@@ -1,7 +1,7 @@
 import React,{useEffect, useState, useContext} from 'react';
-import {Container, Form, FormGroup, Input, Label} from 'reactstrap';
-import {Button} from "@mui/material"
-import { UserContext } from "./UserContext";
+import {Button,FormControl, OutlinedInput, InputLabel, Box } from "@mui/material"
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import PasswordIcon from '@mui/icons-material/Password';
 import {Link,useNavigate} from 'react-router-dom';
 
 function Login(){
@@ -17,13 +17,12 @@ function Login(){
 
     //const  _setUser  = useContext(UserContext);
     
-    function handleChange(event)  {
-        setUser({...user, [event.target.name]:event.target.value})
+    const handleChange = (event) => {
+        setUser({...user, [event.target.id]:event.target.value})
     }
   
     async function handleSubmit(e){
         e.preventDefault();
-        
         await fetch('/api/login',{
             method: 'POST',            
             headers: { 
@@ -43,7 +42,7 @@ function Login(){
 
     return (
         <div>
-            <h1 style={{ textAlign: "center" , font:14}}>Log In</h1>
+            {/* <h1 style={{ textAlign: "center" , font:14}}>Log In</h1>
             <Container> 
             <Form onSubmit={(e)=> handleSubmit(e)}>
                 <FormGroup>
@@ -59,8 +58,45 @@ function Login(){
                 <Button variant='outlined' color="primary" type="submit">LogIn</Button> 
             </Form>
             <p>Not registered yet? <Link to='/registration'> Do It Now!</Link></p>
-            </Container>             
-        </div>
+            </Container>  */}
+            <Box
+                component="form"
+                sx={{
+                    display:'block',
+                    flexDirection:'column',
+                    '& .MuiTextField-root': { m: 1, width: '25ch' },
+                }}
+                noValidate
+                autoComplete="off"
+            >   
+
+            <FormControl margin='dense'>
+                <InputLabel htmlFor="username">Enter Username:</InputLabel>
+                <OutlinedInput
+                    id="username"
+                    value={user.username || ''}
+                    onChange={handleChange}
+                    label="Username"
+                    size='small'
+                    margin='dense'
+                />
+            </FormControl>
+            <FormControl margin='dense'>
+                <InputLabel htmlFor='password'>Enter passsword:</InputLabel>
+                <OutlinedInput
+                    id="password"
+                    type='password'
+                    size='small'
+                    label='Password'
+                    value={user.password || ''}
+                    onChange={handleChange}
+                />
+            </FormControl>
+            </Box> 
+            <Button variant='outlined' color="primary" onClick={(e)=>handleSubmit(e)}>LogIn</Button> 
+            <p>Not registered yet? <Link to='/registration'> Do It Now!</Link></p>
+            </div>
+        
     )
 
 }
