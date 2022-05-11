@@ -2,6 +2,7 @@ import React,{useEffect, useState, useContext} from 'react';
 import {Container, Form, FormGroup, Input, Label} from 'reactstrap';
 import {Button} from "@mui/material"
 import { UserContext } from "./UserContext";
+import {Link,useNavigate} from 'react-router-dom';
 
 function Login(){
 
@@ -12,28 +13,19 @@ function Login(){
 
     const [isLogged,setLogged] = useState(false);
 
-    const  _setUser  = useContext(UserContext);
+    const navigate = useNavigate();
 
-    // var user = {
-    //     username: "",
-    //     password: ""
-    // }
+    //const  _setUser  = useContext(UserContext);
     
     function handleChange(event)  {
-        console.log(event.target.name)
-        console.log(event.target.value)
         setUser({...user, [event.target.name]:event.target.value})
     }
   
     async function handleSubmit(e){
         e.preventDefault();
-        console.log("works")
-        await fetch('/api/login',
-            {
-            //mode:'cors',
-            method: 'POST',
-            //credentials: 'include',
-            
+        
+        await fetch('/api/login',{
+            method: 'POST',            
             headers: { 
                 'accept': 'application/json',
                 'content-type': 'application/json'
@@ -45,17 +37,12 @@ function Login(){
             console.log(data)
             setLogged(data.auth)   
             localStorage.setItem('token', data.token)
-            //localStorage.setItem('user', JSON.stringify(data.result[0]))
-            //_setUser(localStorage.getItem("user"));
         })
-        console.log("User log in")
+        navigate("/employees")
     }
 
     return (
         <div>
-            <header className="App-header">
-                My first React-Node CRUD App
-            </header>
             <h1 style={{ textAlign: "center" , font:14}}>Log In</h1>
             <Container> 
             <Form onSubmit={(e)=> handleSubmit(e)}>
@@ -69,12 +56,10 @@ function Login(){
                     <Input type="password" name="password" id="password" value={user.password || ''}
                     onChange={(e) => {handleChange(e)}} autoComplete="password"/>
                 </FormGroup>          
-                <Button variant='outlined' color="primary" type="submit">LogIn</Button>     
+                <Button variant='outlined' color="primary" type="submit">LogIn</Button> 
             </Form>
-            <p>Not registered yet? <a href='/registration'> Do It Now!</a></p>
-
-            {isLogged && <Button href='/employees'>Check if Authenticated </Button>}
-            </Container>         
+            <p>Not registered yet? <Link to='/registration'> Do It Now!</Link></p>
+            </Container>             
         </div>
     )
 

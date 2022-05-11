@@ -1,41 +1,30 @@
 import './App.css';
-import { Route, Routes, Navigate } from 'react-router-dom';
-import EmployeeUpdate from './EmployeeUpdate';
-import EmployeeTable from './EmployeeTable';
-import EmployeeAddition from './EmployeeAddition';
-import Registration from './Registration';
-import Login from './Login';
+import { Routes, Route, Link } from 'react-router-dom';
 import { useState } from 'react';
 import { UserContext } from "./UserContext";
+import Login from './Login';
+import Registration from './Registration';
+import EmployeeTable from './EmployeeTable';
+import EmployeeAddition from './EmployeeAddition';
+import EmployeeUpdate from './EmployeeUpdate';
+
 
 function App() {
 
   const [user, setUser] = useState(null);
 
-  return (
-    <UserContext.Provider value={{ user, setUser }}>
-    <div className="App">
+  return ( 
+    <div className='App'>
+      <header className='App-header'>My first React-Node CRUD App<Link className='App-link' to='/login'>Click Here to Log in</Link></header>
+      <h1>Welcome to React!</h1>
       <Routes>
-        <Route exact={true} path='/employees' element={<EmployeeTable/>}/>
-        <Route exact={true} path='/employees/:id' element={<EmployeeUpdate/>}/>
-        <Route exact={true} path='/employees/new' element={<EmployeeAddition/>}/>
-        <Route exact={true} path='/registration' element={<Registration/>}/>
-        <Route exact={true} path='/' element={<Login/>}/>
-        <Route
-          path="*"
-          element={
-          <main style={{ padding: "1rem" }}>
-            <p>There's nothing here!</p>
-          </main>
-          }
-    />
-        {/* <Route
-        path="/redirect"
-        element={<Navigate to="/" replace={true} />}
-      /> */}
+        <Route path="/login" element={<Login/>}/> 
+        <Route path ="/registration" element={<Registration/>}/>
+        <Route path="/employees" element={<EmployeeTable/>}/>
+        <Route path="/employees/new" element={<EmployeeAddition/>}/>
+        <Route path="/employees/:id" element={<EmployeeUpdate/>}/>
       </Routes>
-    </div>
-    </UserContext.Provider>
+    </div> 
   );
 }
 

@@ -14,18 +14,23 @@
 }
 
 .App-header {
-  
+  padding-top: 20pt;
   background-color: #8cb3ff;
-  min-height: 15vh;
+  min-height: 25vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(32px + 2vmin);
   color: white;
 }
 
 .App-link {
+  padding-bottom: 5pt;
+  padding-right: 15pt;
+  text-align: right;
+  justify-content: center;
+  align-items: center;
+  font-size: calc(14px + 2vmin);
   color: #ffffff;
 }
 

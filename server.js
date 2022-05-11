@@ -47,7 +47,7 @@ app.listen(port, () => {
 //CRUD ROUTES
 app.get('/api/employees', validateToken,db.getEmployees)
 app.get('/api/employee/:id', validateToken,db.getEmployeeById)
-app.post('/api/employee', validateToken,db.createEmployee)
+app.post('/api/employee/new', validateToken,db.createEmployee)
 app.put('/api/employee/:id', validateToken,db.updateEmployee)
 app.delete('/api/employee/:id', validateToken,db.deleteEmployee)
 
@@ -56,7 +56,7 @@ app.post('/api/registration', db.createUser)
 app.post('/api/login', db.loginUser)
 app.get('/api/isUserAuth',validateToken,db.validateAuth)
 
-//Wildcard redirects 
+//Wildcard redirect 
 app.get('*', function(req, res) {
   res.sendFile(path.join(__dirname, 'ReactProject/my-app/build/index.html'),function(err) {
     if (err) {

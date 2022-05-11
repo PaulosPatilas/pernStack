@@ -60,7 +60,7 @@ const  createEmployee = async(request, response) => {
   const { last_name, first_name, is_active, date_of_birth } = request.body
   console.log(request.userID);
   const user_id = request.userID.id;
-  await pool.query('INSERT INTO Employee (last_name, first_name, is_active, date_of_birth,user_id) VALUES ($1, $2, $3, $4, $5)', [last_name, first_name, is_active, date_of_birth,user_id], (error, results) => {
+  await pool.query('INSERT INTO Employee (last_name, first_name, is_active, date_of_birth, user_id) VALUES ($1, $2, $3, $4, $5)', [last_name, first_name, is_active, date_of_birth,user_id], (error, results) => {
     if (error) {
       throw error
     }
@@ -113,7 +113,6 @@ const createUser = async(request,response) => {
   
   const loginUser = async(request,response) => {
   
-    console.log(process.env.DATABASE_URL)
     const {username, password} = request.body;
   
      await pool.query("SELECT * FROM Users WHERE username = $1;",[username], (error,result) => {
