@@ -1,6 +1,7 @@
 const { createTokens } = require("./JWT");
 const bcrypt = require("bcrypt");
 require('dotenv').config();
+var moment = require('moment')
 //Connecting to a Postgres database from Node.js 
 //In a production environment, you would want to put your configuration details 
 //in a separate file with restrictive permissions that is not accessible from version control
@@ -58,9 +59,10 @@ const getEmployeeById = async(request, response) => {
 const  createEmployee = async(request, response) => {
   //We create the body of the request(what we will Post)
   const { last_name, first_name, is_active, date_of_birth } = request.body
-  console.log(request.userID);
+  console.log(request);
   const user_id = request.userID.id;
-  await pool.query('INSERT INTO Employee (last_name, first_name, is_active, date_of_birth, user_id) VALUES ($1, $2, $3, $4, $5)', [last_name, first_name, is_active, date_of_birth,user_id], (error, results) => {
+  console.log(moment(date_of_birth, "DD-MM-YYYY").format("MM-DD-YYYY"));
+  await pool.query('INSERT INTO Employee (last_name, first_name, is_active, date_of_birth, user_id) VALUES ($1, $2, $3, $4, $5)', [last_name, first_name, is_active, moment(date_of_birth,"DD-MM-YYYY").format("MM-DD-YYYY"),user_id], (error, results) => {
     if (error) {
       throw error
     }
@@ -72,11 +74,12 @@ const  createEmployee = async(request, response) => {
 const updateEmployee = async(request, response) => {
     const id = parseInt(request.params.id)
     console.log(id);
-    const {last_name, first_name, is_active, date_of_birth } = request.body;
+    const {last_name, first_name, is_active, date_of_birth} = request.body;
     const user_id = request.userID.id;
+    console.log(moment(date_of_birth, "DD-MM-YYYY").format("MM-DD-YYYY"));
     await pool.query(
       'UPDATE Employee SET last_name = $1, first_name = $2, is_active = $3, date_of_birth = $4 WHERE id = $5 AND user_id = $6',
-      [last_name, first_name, is_active, date_of_birth, id,user_id],
+      [last_name, first_name, is_active, moment(date_of_birth, "DD-MM-YYYY").format("MM-DD-YYYY"), id,user_id],
       (error, results) => {
         if (error) {
           throw error
@@ -84,9 +87,8 @@ const updateEmployee = async(request, response) => {
         response.status(200).send(`User modified with ID: ${id}` + request.body)
       }
     )
-    console.log('DONE');
+    
 }
-
 //DELETE an Employee
 const deleteEmployee = async(request, response) => {
     const id = parseInt(request.params.id)
@@ -98,6 +100,7 @@ const deleteEmployee = async(request, response) => {
       response.status(200).send(`User deleted with ID: ${id}`)
     })
   }
+  //
 const createUser = async(request,response) => {    
   const {username,password} = request.body
     bcrypt.hash(password,10).then(async (hash) => { 
@@ -111,11 +114,11 @@ const createUser = async(request,response) => {
     }) 
   }
   
-  const loginUser = async(request,response) => {
+const loginUser = async(request,response) => {
   
-    const {username, password} = request.body;
+  const {username, password} = request.body;
   
-     await pool.query("SELECT * FROM Users WHERE username = $1;",[username], (error,result) => {
+    await pool.query("SELECT * FROM Users WHERE username = $1;",[username], (error,result) => {
       console.log("Query executing...")
       if(error){
         throw error;
@@ -137,8 +140,7 @@ const createUser = async(request,response) => {
             response.cookie('token',accessToken,{
               maxAge: 60*60*24 ,
               httpOnly:true,
-              secure:true,
-                        
+              secure:true,             
            })
             response.locals.accessToken = accessToken
             response.json({auth: true, token:accessToken, result:result.rows})

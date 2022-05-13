@@ -1,7 +1,12 @@
 import React,{useEffect, useState} from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import {ButtonGroup,Button,Checkbox,FormControlLabel,Box,FormControl,InputLabel,Input,FormGroup} from '@mui/material';
+import {ButtonGroup,Button,Checkbox,TextField,FormControlLabel,Box,FormControl,InputLabel,Input,FormGroup} from '@mui/material';
 import './EmployeeAddition.css';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import moment from 'moment'
+
 
 function EmployeeAddition() {
     
@@ -16,7 +21,11 @@ function EmployeeAddition() {
   const [newEmployee,setEmployee] = useState(emptyEmployee);
   const [checked, setChecked] = useState(false);
   const navigate = useNavigate();
+  const [value, setValue] = useState();
 
+  const handleChangeDate = (newValue) => {
+    setValue(newValue);
+  };
 
   function handleChange(event)  {
     setEmployee({...newEmployee, [event.target.id]:event.target.value})
@@ -27,13 +36,13 @@ function EmployeeAddition() {
     e.preventDefault();
 
     console.log(newEmployee.is_active);
-    if (newEmployee.first_name == "" || newEmployee.last_name == "" || newEmployee.date_of_birth == ""){
+    if (newEmployee.first_name == "" || newEmployee.last_name == "" ){ //|| newEmployee.date_of_birth == ""
       alert('Please complete the fields first')
       return;
     }
     else {
       setEmployee(newEmployee.is_active=checked);
-
+      setEmployee(newEmployee.date_of_birth=value);
       await fetch(`/api/employee/new`,
       {
         method: 'POST',        
@@ -68,8 +77,7 @@ function EmployeeAddition() {
                     value={newEmployee.last_name || ''}
                     onChange={handleChange}
                     label="last_name"
-                    size='small'
-                    
+                    size='small'    
                 />
         </FormControl>
         <FormControl margin="normal">
@@ -84,14 +92,24 @@ function EmployeeAddition() {
                 />
         </FormControl>
         <FormControl margin="normal" size='normal'>
+        <LocalizationProvider dateAdapter={AdapterMoment}>
+            <DesktopDatePicker
+              id="date_of_birth"
+              label="Date of Birth"
+              inputFormat="DD-MM-YYYY"
+              value={value || ''}            
+              onChange={handleChangeDate}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
             {/* <InputLabel htmlFor="date_of_birth">Enter Date of Birth:</InputLabel> */}
-                <Input
+                {/* <Input
                     id="date_of_birth"
                     value={newEmployee.date_of_birth?.substring(0,10) || ''}
                     onChange={handleChange}
                     label="date_of_birth"
                     type="date"
-                />
+                /> */}
         </FormControl>
         <FormGroup>
         <FormControl margin="small">

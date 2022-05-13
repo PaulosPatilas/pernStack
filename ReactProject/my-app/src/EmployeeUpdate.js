@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 //import {  useRouter } from 'next/router';
-import Moment from 'react-moment';
-import {ButtonGroup,Button,FormLabel,FormControlLabel,Checkbox,Box,FormControl,InputLabel,Input,FormGroup} from '@mui/material';
+import moment from 'moment';
+import {ButtonGroup,Button,TextField,FormLabel,FormControlLabel,Checkbox,Box,FormControl,InputLabel,Input,FormGroup} from '@mui/material';
 import './EmployeeUpdate.css';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+
 
 
 
@@ -17,12 +21,16 @@ function EmployeeUpdate() {
     is_active:''
   };
 
-
   const [employee,setEmployee] = useState(emptyEmployee);
   const [checked, setChecked] = useState(false);
   const  params = useParams();
   const navigate = useNavigate();
   //const router = useRouter();
+  const [value, setValue] = useState();
+
+  const handleChangeDate = (newValue) => {
+    setValue(newValue);
+  };
 
   function getEmployee(id) {
     fetch(`/api/employee/${id}`,{
@@ -37,16 +45,17 @@ function EmployeeUpdate() {
       return response.json();
     })
     .then((result)=>{
-      console.log(result);
       setEmployee(result[0]); 
       console.log(employee)
       setChecked(result[0].is_active); 
+      setValue(result[0].date_of_birth)
     })
   }
 
   useEffect(() => {
     const id = params.id
     getEmployee(id);
+    
     console.log('DONE');
   }
   ,[]);
@@ -64,9 +73,8 @@ function EmployeeUpdate() {
     }
     else{
       setEmployee(employee.is_active = checked);
-    
-      employee.date_of_birth = employee.date_of_birth.substring(0,10);
-        
+      setEmployee(employee.date_of_birth = value);
+      console.log(employee);  
       await fetch(`/api/employee/${employee.id}`,
       {
         //mode:'cors',
@@ -81,20 +89,6 @@ function EmployeeUpdate() {
       navigate('/employees')
     }
   }
-  
-
-  // async function handleCancel(e){
-
-  //   e.preventDefault();
-
-  //   setEmployee(employee.is_active = checked);
-    
-  //   employee.date_of_birth = employee.date_of_birth.substring(0,10);
-  //     navigate('/employees')
-    
-  // }
-  
-
 
   return(
     <div>
@@ -104,8 +98,7 @@ function EmployeeUpdate() {
           m='auto'
           sx={{
             width: 200,
-            height: 400,
-            '& .MuiTextField-root': { m: 5, width: '25ch' },
+            height: 400
         }}
       >
         <div>
@@ -130,14 +123,25 @@ function EmployeeUpdate() {
                 />
         </FormControl>
         <FormControl margin="normal" size='normal'>
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <DesktopDatePicker
+              id="date_of_birth"
+              label="Date of Birth"
+              inputFormat="DD-MM-YYYY"
+              value={value}            
+              onChange={handleChangeDate}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
             {/* <InputLabel htmlFor="date_of_birth">Enter Date of Birth:</InputLabel> */}
-             <Input
+             {/* <Input
                     id="date_of_birth"
-                    value={employee.date_of_birth?.substring(0,10)}
-                    onChange={handleChange}
+                    value={moment(new Date(employee.date_of_birth?.substring(0,10))).format('DD-MM-YYYY')}
+                    //placeholder='dd-mm-yyyy
+                    onChange={handleChange} 
                     label="date_of_birth"                    
                     type="date"
-                />
+                /> */}
         </FormControl>
         <FormControl>
           <FormGroup>

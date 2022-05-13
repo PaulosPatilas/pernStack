@@ -21,7 +21,7 @@ function App() {
       setLogged(true)
     }
     else {setLogged(false)}
-  })
+  },[])
     
   return ( 
     <div className='App'>
