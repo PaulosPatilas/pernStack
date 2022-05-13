@@ -87,7 +87,7 @@ function EmployeeAddition() {
             {/* <InputLabel htmlFor="date_of_birth">Enter Date of Birth:</InputLabel> */}
                 <Input
                     id="date_of_birth"
-                    value={newEmployee.date_of_birth.substring(0,10) || ''}
+                    value={newEmployee.date_of_birth?.substring(0,10) || ''}
                     onChange={handleChange}
                     label="date_of_birth"
                     type="date"

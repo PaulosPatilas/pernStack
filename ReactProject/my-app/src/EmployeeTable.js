@@ -2,7 +2,7 @@ import React,{useState,useEffect, useRef} from 'react'
 import { Link } from 'react-router-dom';
 import EmployeeRow from './EmployeeRow';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {Table,TableHead,TableRow,TableBody,TableCell,ButtonGroup,Button} from '@mui/material';
+import {Table,TableHead,TableRow,TableBody,TableCell,ButtonGroup,Button,Box,Modal,Typography} from '@mui/material';
 import { Stack } from '@mui/material';
 import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
 import { Container } from '@mui/material';
@@ -11,6 +11,20 @@ import { Container } from '@mui/material';
 function EmployeeTable() {
     
   const [employees,setEmployees] = useState([]);
+  const [open,setOpen] = useState(false)
+
+  const style = {
+    position: 'absolute',
+    top: '60%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    height: 150,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 
   useEffect(() => {   
     fetch('api/employees', {
@@ -26,6 +40,9 @@ function EmployeeTable() {
     })
   },[]);
         
+  function handleClose(){
+    setOpen()
+  }
 
   async function handleDeleteClick(id){   
     await fetch(`api/employee/${id}`, {
@@ -39,18 +56,35 @@ function EmployeeTable() {
     .then(() => {
       let updatedEmployees = [...employees].filter(i => i.id !== id);
       setEmployees(updatedEmployees);
+      setOpen(false);
     });
   }
 
   const employeeList = employees.map(employee => {
-    return (
+    return (<>
       <TableRow key={employee.id}>
       <EmployeeRow edit={true} id={employee.id} LastName={employee.last_name} FirstName={employee.first_name} BirthDate={employee.date_of_birth.substring(0,10)} is_active={employee.is_active} />
       <Stack direction="row" spacing={2} justifyContent="center">
-        <Button startIcon={<DeleteIcon/>} variant='outlined' color='secondary' onClick={()=> handleDeleteClick(employee.id)}>Delete</Button>
+        <Button startIcon={<DeleteIcon/>} variant='outlined' color='secondary' onClick={() => setOpen(true)}>Delete</Button>
         <Link to={"/employees/" + employee.id}><Button block color='primary' variant='outlined'>Update</Button></Link>      
       </Stack>      
-      </TableRow>       
+      </TableRow>
+      <Modal
+        open={open}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+      <Box sx={style}>
+        <Typography id="modal-modal-title" variant="h6" component="h2">
+          WARNING
+        </Typography>
+        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          Are you sure you want to delete this employee?
+        </Typography>
+        <Button variant='outlined' color='secondary' style={{marginLeft: 20,marginTop: 30}} onClick={()=>{handleDeleteClick(employee.id)}}> Yes </Button>
+        <Button variant='outlined' color='secondary' style={{marginLeft: 200,marginTop: 30}} onClick={()=>{setOpen(false)}}> No </Button>
+      </Box>     
+    </Modal>    </>   
     )}
   );
 

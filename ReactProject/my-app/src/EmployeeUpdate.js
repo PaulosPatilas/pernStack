@@ -133,7 +133,7 @@ function EmployeeUpdate() {
             {/* <InputLabel htmlFor="date_of_birth">Enter Date of Birth:</InputLabel> */}
              <Input
                     id="date_of_birth"
-                    value={<Moment format="DD-MM-YYYY" parse='yyyy-MM-dd hh mm ss a'>{employee.date_of_birth.substring(0,10)}</Moment>}
+                    value={employee.date_of_birth?.substring(0,10)}
                     onChange={handleChange}
                     label="date_of_birth"                    
                     type="date"
