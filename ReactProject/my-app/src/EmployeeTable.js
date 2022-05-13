@@ -64,9 +64,9 @@ function EmployeeTable() {
     return (<>
       <TableRow key={employee.id}>
       <EmployeeRow edit={true} id={employee.id} LastName={employee.last_name} FirstName={employee.first_name} BirthDate={employee.date_of_birth.substring(0,10)} is_active={employee.is_active} />
-      <Stack direction="row" spacing={2} justifyContent="center">
-        <Button startIcon={<DeleteIcon/>} variant='outlined' color='secondary' onClick={() => setOpen(true)}>Delete</Button>
-        <Link to={"/employees/" + employee.id}><Button block color='primary' variant='outlined'>Update</Button></Link>      
+      <Stack style={{marginTop:10}} direction="row"  spacing={2} justifyContent="center">
+        <Button size='small' startIcon={<DeleteIcon/>} variant='outlined' color='secondary' onClick={() => setOpen(true)}>Delete</Button>
+        <Link to={"/employees/" + employee.id}><Button size='small' block color='primary' variant='outlined'>Update</Button></Link>      
       </Stack>      
       </TableRow>
       <Modal
@@ -81,8 +81,9 @@ function EmployeeTable() {
         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
           Are you sure you want to delete this employee?
         </Typography>
+        
         <Button variant='outlined' color='secondary' style={{marginLeft: 20,marginTop: 30}} onClick={()=>{handleDeleteClick(employee.id)}}> Yes </Button>
-        <Button variant='outlined' color='secondary' style={{marginLeft: 200,marginTop: 30}} onClick={()=>{setOpen(false)}}> No </Button>
+        <Button variant='outlined' color='secondary' style={{marginLeft: 200,marginTop: 30}} onClick={()=>{setOpen(false)}}> No </Button>      
       </Box>     
     </Modal>    </>   
     )}

@@ -9,7 +9,7 @@ function EmployeeRow(props) {
         <>
             <TableCell>{props?.LastName}</TableCell>
             <TableCell>{props?.FirstName}</TableCell>
-            <TableCell align='center'>{moment(props?.BirthDate).format("DD-MM-YYYY")}</TableCell>
+            <TableCell style={{align:'center'}}>{moment(props?.BirthDate).format("DD-MM-YYYY")}</TableCell>
             <TableCell>{props?.is_active ? 'Yes' : 'No'}</TableCell>
         </>                 
     )
