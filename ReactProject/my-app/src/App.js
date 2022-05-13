@@ -1,22 +1,33 @@
 import './App.css';
 import { Routes, Route, Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState,  useEffect } from 'react';
 import { UserContext } from "./UserContext";
+import {Button} from '@mui/material'
 import Login from './Login';
 import Registration from './Registration';
 import EmployeeTable from './EmployeeTable';
 import EmployeeAddition from './EmployeeAddition';
 import EmployeeUpdate from './EmployeeUpdate';
+import logo from './logo.svg';
 
 
 function App() {
 
-  const [user, setUser] = useState(null);
+  const [isLogged, setLogged] = useState(null);
 
+
+  useEffect(()=>{ 
+    if(localStorage.getItem("token") !== null){
+      setLogged(true)
+    }
+    else {setLogged(false)}
+  })
+    
   return ( 
     <div className='App'>
-      <header className='App-header'>My first React-Node CRUD App<Link className='App-link' to='/login'>Click Here to Log in</Link></header>
-      <h1>Welcome to React!</h1>
+      <header className='App-header'>My first React-Node CRUD App {!isLogged && <Link className='App-link' to='/login'><Button color='secondary' onClick={()=>{window.scrollTo(0, 450)}} variant='text'>LOG IN</Button></Link>}
+      {!isLogged && <img src={logo} className="App-logo" alt="logo" />}
+      </header>
       <Routes>
         <Route path="/login" element={<Login/>}/> 
         <Route path ="/registration" element={<Registration/>}/>
@@ -25,6 +36,7 @@ function App() {
         <Route path="/employees/:id" element={<EmployeeUpdate/>}/>
       </Routes>
     </div> 
+    
   );
 }
 

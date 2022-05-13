@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
-import {  Form, FormGroup, Input, Label } from 'reactstrap';
-import {Container,Button,Checkbox} from '@mui/material';
+//import {  useRouter } from 'next/router';
+import Moment from 'react-moment';
+import {ButtonGroup,Button,FormLabel,FormControlLabel,Checkbox,Box,FormControl,InputLabel,Input,FormGroup} from '@mui/material';
 import './EmployeeUpdate.css';
+
 
 
 function EmployeeUpdate() {
@@ -21,13 +22,11 @@ function EmployeeUpdate() {
   const [checked, setChecked] = useState(false);
   const  params = useParams();
   const navigate = useNavigate();
+  //const router = useRouter();
 
-
-  useEffect(async () => {
-    const id = params.id;
-    
-    await fetch(`/api/employee/${id}`, {
-      //mode:'cors',
+  function getEmployee(id) {
+    fetch(`/api/employee/${id}`,{
+      method:'GET',
       headers:{
       'x-access-token':localStorage.getItem("token"),
       'Accept': 'application/json',
@@ -37,43 +36,133 @@ function EmployeeUpdate() {
     .then(response => {
       return response.json();
     })
-    .then((result) => {
+    .then((result)=>{
+      console.log(result);
       setEmployee(result[0]); 
+      console.log(employee)
       setChecked(result[0].is_active); 
     })
-  },[]);
+  }
+
+  useEffect(() => {
+    const id = params.id
+    getEmployee(id);
+    console.log('DONE');
+  }
+  ,[]);
 
   function handleChange(event)  {
-    setEmployee({...employee,[event.target.name]:event.target.value})
+    setEmployee({...employee,[event.target.id]:event.target.value})
   }
 
   async function handleSubmit(e){
 
     e.preventDefault();
+
+    if(employee.first_name == '' || employee.last_name == ''){
+
+    }
+    else{
+      setEmployee(employee.is_active = checked);
     
-    setEmployee(employee.is_active = checked);
-    
-    employee.date_of_birth = employee.date_of_birth.substring(0,10);
+      employee.date_of_birth = employee.date_of_birth.substring(0,10);
         
-    await fetch(`/api/employee/${employee.id}`,
-    {
-      //mode:'cors',
-      method: 'PUT',
-      headers: { 
-        'accept': 'application/json',
-        'x-access-token':localStorage.getItem("token"),
-        'content-type': 'application/json'
-      },
-      body:JSON.stringify(employee)
-    })
-    navigate('/employees')
+      await fetch(`/api/employee/${employee.id}`,
+      {
+        //mode:'cors',
+        method: 'PUT',
+        headers: { 
+          'accept': 'application/json',
+          'x-access-token':localStorage.getItem("token"),
+          'content-type': 'application/json'
+        },
+        body:JSON.stringify(employee)
+      })
+      navigate('/employees')
+    }
   }
   
+
+  // async function handleCancel(e){
+
+  //   e.preventDefault();
+
+  //   setEmployee(employee.is_active = checked);
+    
+  //   employee.date_of_birth = employee.date_of_birth.substring(0,10);
+  //     navigate('/employees')
+    
+  // }
+  
+
 
   return(
     <div>
       <h1 style={{ textAlign: "center" , font:14}}>Edit {employee.first_name}  {employee.last_name} Profile!</h1>
-      <Container> 
+
+      <Box 
+          m='auto'
+          sx={{
+            width: 200,
+            height: 400,
+            '& .MuiTextField-root': { m: 5, width: '25ch' },
+        }}
+      >
+        <div>
+        <FormControl margin="normal">
+            <InputLabel htmlFor="last_name">Enter Last Name:</InputLabel>
+                <Input
+                    id="last_name"
+                    value={employee.last_name}
+                    onChange={handleChange}
+                    label="last_name"
+                    size='small'
+                />
+        </FormControl>
+        <FormControl margin="normal">
+            <InputLabel htmlFor="first_name">Enter First Name:</InputLabel>
+                <Input
+                    id="first_name"
+                    value={employee.first_name}
+                    onChange={handleChange}
+                    label="first_name"
+                    size='small'                    
+                />
+        </FormControl>
+        <FormControl margin="normal" size='normal'>
+            {/* <InputLabel htmlFor="date_of_birth">Enter Date of Birth:</InputLabel> */}
+             <Input
+                    id="date_of_birth"
+                    value={<Moment format="DD-MM-YYYY" parse='yyyy-MM-dd hh mm ss a'>{employee.date_of_birth.substring(0,10)}</Moment>}
+                    onChange={handleChange}
+                    label="date_of_birth"                    
+                    type="date"
+                />
+        </FormControl>
+        <FormControl>
+          <FormGroup>
+             {/* <FormControlLabel htmlFor="is_active">Activity</FormControlLabel>  */}
+                <FormControlLabel                                   
+                    id="is_active"
+                    control={<Checkbox />}
+                    labelPlacement="start"
+                    label='Activity'
+                    value={employee.is_active}
+                    onChange={(event) => setChecked(event.target.checked)}
+                    name = 'is_active'
+                    size='small'
+                    checked ={checked}
+                />
+              </FormGroup>
+        </FormControl>
+        </div>
+        <ButtonGroup>
+        <Button variant="contained"  color="primary" onClick={(e)=>handleSubmit(e)}>Save</Button>
+        <Button variant="outlined" color="secondary" onClick={()=>{navigate('/employees')}}>Cancel</Button>
+
+        </ButtonGroup>
+      </Box>
+      {/* <Container> 
         <Form onSubmit={(e)=> handleSubmit(e)}>
           <FormGroup>
             <Label for="firstname">Firstname</Label>
@@ -100,7 +189,7 @@ function EmployeeUpdate() {
             <Button variant="outlined" color="secondary" onClick={()=>{navigate('/employees')}}>Cancel</Button>
           </FormGroup>
         </Form>
-      </Container>       
+      </Container>        */}
     </div>
   )
 

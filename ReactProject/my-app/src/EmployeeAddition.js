@@ -1,7 +1,6 @@
 import React,{useEffect, useState} from 'react';
-import {  Form, FormGroup, Input, Label} from 'reactstrap';
 import { Link, useNavigate } from "react-router-dom";
-import {Button, Container} from '@mui/material';
+import {ButtonGroup,Button,Checkbox,FormControlLabel,Box,FormControl,InputLabel,Input,FormGroup} from '@mui/material';
 import './EmployeeAddition.css';
 
 function EmployeeAddition() {
@@ -20,9 +19,7 @@ function EmployeeAddition() {
 
 
   function handleChange(event)  {
-    console.log(event.target.name)
-    console.log(event.target.value)
-    setEmployee({...newEmployee, [event.target.name]:event.target.value})
+    setEmployee({...newEmployee, [event.target.id]:event.target.value})
   }
 
   async function handleSubmit(e){
@@ -55,7 +52,69 @@ function EmployeeAddition() {
   return (
     <div>
       <h1 style={{ textAlign: "center" , font:14}}>Add new Employee</h1>
-      <Container> 
+      <Box 
+          m='auto'
+          sx={{
+            width: 200,
+            height: 400,
+          
+        }}
+      >
+        <div>
+        <FormControl margin="normal">
+            <InputLabel htmlFor="last_name">Enter Last Name:</InputLabel>
+                <Input
+                    id="last_name"
+                    value={newEmployee.last_name || ''}
+                    onChange={handleChange}
+                    label="last_name"
+                    size='small'
+                    
+                />
+        </FormControl>
+        <FormControl margin="normal">
+            <InputLabel htmlFor="first_name">Enter First Name:</InputLabel>
+                <Input
+                    id="first_name"
+                    value={newEmployee.first_name || ''}
+                    onChange={handleChange}
+                    label="first_name"
+                    size='small'
+                    
+                />
+        </FormControl>
+        <FormControl margin="normal" size='normal'>
+            {/* <InputLabel htmlFor="date_of_birth">Enter Date of Birth:</InputLabel> */}
+                <Input
+                    id="date_of_birth"
+                    value={newEmployee.date_of_birth.substring(0,10) || ''}
+                    onChange={handleChange}
+                    label="date_of_birth"
+                    type="date"
+                />
+        </FormControl>
+        <FormGroup>
+        <FormControl margin="small">
+          <FormControlLabel                                   
+                    id="is_active"
+                    control={<Checkbox />}
+                    labelPlacement="start"
+                    label='Activity'
+                    value={newEmployee.is_active}
+                    onChange={(event) => setChecked(event.target.checked)}
+                    name = 'is_active'
+                    size='small'
+                    checked ={checked}
+                />
+        </FormControl>
+        </FormGroup>
+        </div>
+        <ButtonGroup>
+        <Button variant="contained"  color="primary" onClick={(e)=>handleSubmit(e)}>Save</Button>
+        <Button variant="outlined" color="secondary" onClick={()=>{navigate('/employees')}}>Cancel</Button>
+        </ButtonGroup>
+      </Box>
+      {/* <Container> 
         <Form onSubmit={(e)=> handleSubmit(e)}>
           <FormGroup>
             <Label for="firstname">Firstname</Label>
@@ -82,7 +141,7 @@ function EmployeeAddition() {
             <Link to={'/employees'}><Button variant='outlined' color="secondary">Cancel</Button></Link>
           </FormGroup>
         </Form>
-      </Container>       
+      </Container>        */}
     </div>
   )        
 }    

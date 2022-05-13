@@ -10,6 +10,10 @@ function Registration(){
   })
     
   async function handleSubmit(){
+    if (user.password == "" || user.username == ""){
+      alert("Είναι απαραίτητο να συμπληρώσετε τα στοιχεία σας");
+    }
+    else {
     await fetch('/api/registration',{
       method: 'POST',
       headers: { 
@@ -18,7 +22,7 @@ function Registration(){
       },
       body:JSON.stringify(user)
     })
-  }
+  }}
 
   function handleChange(event)  {
     setUser({...user, [event.target.id]:event.target.value})
@@ -26,11 +30,15 @@ function Registration(){
 
   return(
     <div>
-      <Box
-        component="form"
-        sx={{
-              display:'block',
-              flexDirection:'column',
+        <form id="regForm" >
+        <Box
+            margin='auto'
+            component="form"
+            sx={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '200pt',
+              height: '400pt',
               '& .MuiTextField-root': { m: 1, width: '25ch' },
             }}
             noValidate
@@ -39,6 +47,7 @@ function Registration(){
             <FormControl margin='dense'>
                 <InputLabel htmlFor="username">Enter Username:</InputLabel>
                 <OutlinedInput
+                    required
                     id="username"
                     value={user.username || ''}
                     onChange={handleChange}
@@ -50,6 +59,7 @@ function Registration(){
             <FormControl margin='dense'>
                 <InputLabel htmlFor='password'>Enter passsword:</InputLabel>
                 <OutlinedInput
+                    required
                     id="password"
                     type='password'
                     size='small'
@@ -58,11 +68,12 @@ function Registration(){
                     onChange={handleChange}
                 />
             </FormControl>
-            </Box> 
-    
-    <Link to='/login'><Button variant='outlined' color="primary" type="submit">Sign Up</Button></Link>
-    <Link to='/'><Button variant='outlined' color="secondary">Cancel</Button></Link>
+            <Link to='/login'><Button variant='outlined' color="primary" form='regForm' onClick={() => handleSubmit()}>Sign Up</Button></Link>
+            <Link to='/'><Button variant='outlined' color="secondary">Cancel</Button></Link>
+            </Box>           
+        </form>
     </div>
+    
   )
 }
 export default Registration

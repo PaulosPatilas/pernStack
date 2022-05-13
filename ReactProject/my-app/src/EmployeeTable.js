@@ -1,8 +1,12 @@
 import React,{useState,useEffect, useRef} from 'react'
-import EmployeeRow from './EmployeeRow';
-import{Table} from 'reactstrap';
 import { Link } from 'react-router-dom';
-import {ButtonGroup,Button} from '@mui/material';
+import EmployeeRow from './EmployeeRow';
+import DeleteIcon from '@mui/icons-material/Delete';
+import {Table,TableHead,TableRow,TableBody,TableCell,ButtonGroup,Button} from '@mui/material';
+import { Stack } from '@mui/material';
+import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
+import { Container } from '@mui/material';
+
 
 function EmployeeTable() {
     
@@ -40,36 +44,36 @@ function EmployeeTable() {
 
   const employeeList = employees.map(employee => {
     return (
-      <tr key={employee.id}>
+      <TableRow key={employee.id}>
       <EmployeeRow edit={true} id={employee.id} LastName={employee.last_name} FirstName={employee.first_name} BirthDate={employee.date_of_birth.substring(0,10)} is_active={employee.is_active} />
-      <ButtonGroup>
-        <Button variant='outlined' color='warning' onClick={()=> handleDeleteClick(employee.id)}>Delete</Button>
-        <Link to={"/employees/" + employee.id}><Button variant='outlined' color='secondary'>Update</Button></Link>      
-      </ButtonGroup>      
-      </tr>       
+      <Stack direction="row" spacing={2} justifyContent="center">
+        <Button startIcon={<DeleteIcon/>} variant='outlined' color='secondary' onClick={()=> handleDeleteClick(employee.id)}>Delete</Button>
+        <Link to={"/employees/" + employee.id}><Button block color='primary' variant='outlined'>Update</Button></Link>      
+      </Stack>      
+      </TableRow>       
     )}
   );
 
   return (
     <div>
-      <div style={{paddingTop: 10}} className='container'>
-        <Link to={'/employees/new'}><Button fullWidth style={{marginBottom: 30}} variant='contained' color='primary'>Add new Employee</Button></Link>         
-        <Table bordered>
-          <thead>
-            <tr>
-              <th>Last Name</th>
-              <th>First Name</th>
-              <th>Date of birth</th>
-              <th>Active</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
+      <Container style={{paddingTop: 10}} className='container'>
+        <Link to={'/employees/new'}><Button style={{marginBottom: 30}} variant='contained' color='primary'>Add new Employee</Button></Link>         
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Last Name</TableCell>
+              <TableCell>First Name</TableCell>
+              <TableCell>Date of birth</TableCell>
+              <TableCell>Active</TableCell>
+              <TableCell align='center'>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {employeeList}    
-          </tbody>
+          </TableBody>
         </Table>
-      </div>
-      <Link to={'/'}><Button color='warning' onClick={()=>{localStorage.removeItem("token")}}>LogOut</Button></Link> 
+      </Container>
+      <Link to={'/'}><Button endIcon={<LogoutSharpIcon/>} style={{marginTop: 30}} variant='contained' color='secondary' onClick={()=>{localStorage.removeItem("token")}}>LogOut</Button></Link> 
     </div>
   )   
 }

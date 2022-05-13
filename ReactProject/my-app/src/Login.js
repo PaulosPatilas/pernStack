@@ -1,8 +1,10 @@
 import React,{useEffect, useState, useContext} from 'react';
-import {Button,FormControl, OutlinedInput, InputLabel, Box } from "@mui/material"
+import {Button,FormGroup,FormControl, OutlinedInput, InputLabel, Box } from "@mui/material"
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LoginSharpIcon from '@mui/icons-material/LoginSharp';
 import PasswordIcon from '@mui/icons-material/Password';
 import {Link,useNavigate} from 'react-router-dom';
+
 
 function Login(){
 
@@ -42,35 +44,20 @@ function Login(){
 
     return (
         <div>
-            {/* <h1 style={{ textAlign: "center" , font:14}}>Log In</h1>
-            <Container> 
-            <Form onSubmit={(e)=> handleSubmit(e)}>
-                <FormGroup>
-                    <Label for="username">Username</Label>
-                    <Input type="text" name="username" id="username" value={user.username || ''}
-                    onChange={(e) => {handleChange(e)}} autoComplete="username"/>
-                </FormGroup>
-                <FormGroup>
-                    <Label for="password">Password</Label>
-                    <Input type="password" name="password" id="password" value={user.password || ''}
-                    onChange={(e) => {handleChange(e)}} autoComplete="password"/>
-                </FormGroup>          
-                <Button variant='outlined' color="primary" type="submit">LogIn</Button> 
-            </Form>
-            <p>Not registered yet? <Link to='/registration'> Do It Now!</Link></p>
-            </Container>  */}
             <Box
+                m="auto"
                 component="form"
-                sx={{
-                    display:'block',
-                    flexDirection:'column',
-                    '& .MuiTextField-root': { m: 1, width: '25ch' },
+                sx={{  
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '200pt',
+                    height: '400pt',
+                    '& .MuiTextField-root': { p:5 ,m: 1, width: '15ch' },
                 }}
                 noValidate
                 autoComplete="off"
             >   
-
-            <FormControl margin='dense'>
+            <FormControl margin='normal'>
                 <InputLabel htmlFor="username">Enter Username:</InputLabel>
                 <OutlinedInput
                     id="username"
@@ -78,10 +65,10 @@ function Login(){
                     onChange={handleChange}
                     label="Username"
                     size='small'
-                    margin='dense'
+                    
                 />
             </FormControl>
-            <FormControl margin='dense'>
+            <FormControl margin='normal'>
                 <InputLabel htmlFor='password'>Enter passsword:</InputLabel>
                 <OutlinedInput
                     id="password"
@@ -92,13 +79,13 @@ function Login(){
                     onChange={handleChange}
                 />
             </FormControl>
-            </Box> 
-            <Button variant='outlined' color="primary" onClick={(e)=>handleSubmit(e)}>LogIn</Button> 
+            <FormGroup margin='normal' >
+            <Button  variant='contained' startIcon={<LoginSharpIcon/>} color="primary" onClick={(e)=>handleSubmit(e)}>LogIn</Button> 
             <p>Not registered yet? <Link to='/registration'> Do It Now!</Link></p>
-            </div>
-        
+            </FormGroup>
+            </Box>           
+        </div>       
     )
-
 }
 
 export default Login 
