@@ -33,7 +33,9 @@
   align-items: center;
   font-size: calc(14px + 2vmin);
   color: #ffffff;
+  text-decoration: none;
 }
+
 
 @keyframes App-logo-spin {
   from {
