@@ -36,11 +36,6 @@ export default function ButtonAppBar(props) {
           {!isLogged &&
           <Button
             color="secondary"
-            onClick={() => {
-                //style.visibility = 'hidden'
-                window.scrollTo(0, 450);
-                //setLogged(true);
-            }}
             >
             <Link className="App-link" to="/login">
              Log In 
