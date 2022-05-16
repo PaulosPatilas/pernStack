@@ -31,6 +31,12 @@ function EmployeeAddition() {
     setEmployee({...newEmployee, [event.target.id]:event.target.value})
   }
 
+  useEffect(()=>{
+    if (localStorage.getItem("token")== null){
+      navigate('/')
+    }
+  })
+
   async function handleSubmit(e){
 
     e.preventDefault();

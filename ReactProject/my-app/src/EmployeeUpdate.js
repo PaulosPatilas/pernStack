@@ -53,12 +53,16 @@ function EmployeeUpdate() {
   }
 
   useEffect(() => {
-    const id = params.id
-    getEmployee(id);
+    if (localStorage.getItem("token")== null){
+      navigate('/')
+    }
+    else {
+      const id = params.id
+      getEmployee(id);
     
-    console.log('DONE');
-  }
-  ,[]);
+      console.log('DONE');
+    }
+  },[]);
 
   function handleChange(event)  {
     setEmployee({...employee,[event.target.id]:event.target.value})

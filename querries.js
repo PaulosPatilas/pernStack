@@ -122,14 +122,14 @@ const loginUser = async(request,response) => {
       console.log("Query executing...")
       if(error){
         throw error;
-      }
-      
+        
+      } 
       if(result.rows.length > 0){
         const dbPass = result.rows[0].password
         bcrypt.compare(password, dbPass)
         .then( (match) => {
           if(!match){
-            response.status(400).json({auth: false, message:'no user exists'})
+            response.status(400).json({auth: false, message:'Password is incorrect! Please try again'})
             console.log("Password doesnt match")
           }
           else {
@@ -151,6 +151,7 @@ const loginUser = async(request,response) => {
           }
         }
       )}
+      else {response.status(400).json({auth: false, message:'no user with such username exists'})}
       //response.status(200).send("User Logged In" + username + password)
     })
   }

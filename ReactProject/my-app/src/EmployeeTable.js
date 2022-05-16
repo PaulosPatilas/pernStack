@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import EmployeeRow from "./EmployeeRow";
 import DeleteIcon from "@mui/icons-material/Delete";
-import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
+import LogoutSharpIcon from "@mui/icons-material/LogoutSharp";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Table,
   TableHead,
@@ -18,10 +19,12 @@ import {
 import { Stack } from "@mui/material";
 import "./EmployeeTable.css";
 import { Container } from "@mui/material";
+import { NoEncryption } from "@mui/icons-material";
 
 function EmployeeTable() {
   const [employees, setEmployees] = useState([]);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const style = {
     position: "absolute",
@@ -37,17 +40,24 @@ function EmployeeTable() {
   };
 
   useEffect(() => {
-    fetch("api/employees", {
-      headers: {
-        "x-access-token": localStorage.getItem("token"),
-      },
-    })
-      .then((response) => {
-        return response.json();
+    if (
+      localStorage.getItem("token") == null ||
+      localStorage.getItem("token") == undefined
+    ) {
+      navigate("/");
+    } else {
+      fetch("api/employees", {
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
       })
-      .then((result) => {
-        setEmployees(result);
-      });
+        .then((response) => {
+          return response.json();
+        })
+        .then((result) => {
+          setEmployees(result);
+        });
+    }
   }, []);
 
   function handleClose() {
@@ -95,10 +105,8 @@ function EmployeeTable() {
             >
               Delete
             </Button>
-            <Button color="primary" variant="outlined">
-              <Link to={"/employees/" + employee.id}>
-                Update
-              </Link> 
+            <Button color="primary" variant="outlined" startIcon={<EditIcon />}>
+              <Link style={{textDecoration:'none'}} to={"/employees/" + employee.id}>Editor</Link>
             </Button>
           </Stack>
         </TableRow>
@@ -145,7 +153,7 @@ function EmployeeTable() {
   return (
     <div>
       <Container style={{ paddingTop: 10 }} className="container">
-        <Link to={"/employees/new"}>
+        <Link style={{textDecoration:'none'}} to={"/employees/new"}>
           <Button
             style={{ marginBottom: 30 }}
             variant="contained"
