@@ -62,7 +62,7 @@ const  createEmployee = async(request, response) => {
   console.log(request);
   const user_id = request.userID.id;
   console.log("Our date " + date_of_birth + " was converted to " + moment.utc(date_of_birth).format("MM-DD-YYYY"));
-  await pool.query('INSERT INTO Employee (last_name, first_name, is_active, date_of_birth, user_id) VALUES ($1, $2, $3, $4, $5)', [last_name, first_name, is_active, moment(date_of_birth).format("MM-DD-YYYY"),user_id], (error, results) => {
+  await pool.query('INSERT INTO Employee (last_name, first_name, is_active, date_of_birth, user_id) VALUES ($1, $2, $3, $4, $5)', [last_name, first_name, is_active, moment.utc(date_of_birth).format("MM-DD-YYYY"),user_id], (error, results) => {
     if (error) {
       throw error
     }
