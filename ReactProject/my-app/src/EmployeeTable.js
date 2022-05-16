@@ -78,7 +78,7 @@ function EmployeeTable() {
             id={employee.id}
             LastName={employee.last_name}
             FirstName={employee.first_name}
-            BirthDate={employee.date_of_birth.substring(0, 10)}
+            BirthDate={employee.date_of_birth}
             is_active={employee.is_active}
           />
           <Stack

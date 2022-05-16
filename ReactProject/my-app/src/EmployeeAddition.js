@@ -43,6 +43,7 @@ function EmployeeAddition() {
     else {
       setEmployee(newEmployee.is_active=checked);
       setEmployee(newEmployee.date_of_birth=value);
+      console.log(newEmployee.date_of_birth);
       await fetch(`/api/employee/new`,
       {
         method: 'POST',        
