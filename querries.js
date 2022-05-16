@@ -61,7 +61,7 @@ const  createEmployee = async(request, response) => {
   const { last_name, first_name, is_active, date_of_birth } = request.body
   console.log(request);
   const user_id = request.userID.id;
-  //console.log("Our date " + date_of_birth + " was converted to " + moment.utc(date_of_birth).format("MM-DD-YYYY"));
+  console.log("Our date " + date_of_birth + " was converted to " + moment.utc(date_of_birth).format("MM-DD-YYYY"));
   await pool.query('INSERT INTO Employee (last_name, first_name, is_active, date_of_birth, user_id) VALUES ($1, $2, $3, $4, $5)', [last_name, first_name, is_active, moment(date_of_birth).format("MM-DD-YYYY"),user_id], (error, results) => {
     if (error) {
       throw error
@@ -76,7 +76,7 @@ const updateEmployee = async(request, response) => {
     console.log(id);
     const {last_name, first_name, is_active, date_of_birth} = request.body;
     const user_id = request.userID.id;
-    //console.log("Our date " + date_of_birth + " was converted to " + moment.utc(date_of_birth).format("YYYY-MM-DD"));
+    console.log("Our date " + date_of_birth + " was converted to " + moment.utc(date_of_birth).format("YYYY-MM-DD"));
     await pool.query(
       'UPDATE Employee SET last_name = $1, first_name = $2, is_active = $3, date_of_birth = $4 WHERE id = $5 AND user_id = $6',
       [last_name, first_name, is_active, moment(date_of_birth).format("MM-DD-YYYY"), id,user_id],
