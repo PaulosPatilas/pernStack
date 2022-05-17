@@ -106,7 +106,12 @@ function EmployeeTable() {
               Delete
             </Button>
             <Button color="primary" variant="outlined" startIcon={<EditIcon />}>
-              <Link style={{textDecoration:'none'}} to={"/employees/" + employee.id}>Editor</Link>
+              <Link
+                style={{ textDecoration: "none" }}
+                to={"/employees/" + employee.id}
+              >
+                Editor
+              </Link>
             </Button>
           </Stack>
         </TableRow>
@@ -120,7 +125,8 @@ function EmployeeTable() {
               WARNING
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Are you sure you want to delete employee {employee.last_name} {employee.first_name} ? 
+              Are you sure you want to delete employee {employee.last_name}{" "}
+              {employee.first_name} ?
             </Typography>
             <Button
               variant="outlined"
@@ -153,7 +159,7 @@ function EmployeeTable() {
   return (
     <div>
       <Container style={{ paddingTop: 10 }} className="container">
-        <Link style={{textDecoration:'none'}} to={"/employees/new"}>
+        <Link style={{ textDecoration: "none" }} to={"/employees/new"}>
           <Button
             style={{ marginBottom: 30 }}
             variant="contained"

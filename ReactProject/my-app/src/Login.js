@@ -21,13 +21,11 @@ function Login(props) {
   });
 
   const [status, setStatus] = useState(false);
-  const [errorMessage,seterrorMessage] = useState();
+  const [errorMessage, seterrorMessage] = useState();
 
   const {
-    isLogged:[isLogged,setLogged]
-  } = {isLogged:useState(false),
-      ...(props.state || {})
-  }
+    isLogged: [isLogged, setLogged],
+  } = { isLogged: useState(false), ...(props.state || {}) };
 
   const navigate = useNavigate();
 
@@ -47,22 +45,23 @@ function Login(props) {
       },
       body: JSON.stringify(user),
     })
-    .then((response) =>  response.json() )
-    .then((data) => {
-        if (data.auth){
-            console.log(data);
-            setStatus(true);
-            localStorage.setItem("token", data.token);
-            navigate("/employees");
-            setLogged(true)
-        }
-        else {
-            console.log('data.auth: ' + data.auth + " data.message: " + data.message) ;
-            setStatus(data.auth);
-            seterrorMessage(data.message);
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.auth) {
+          console.log(data);
+          setStatus(true);
+          localStorage.setItem("token", data.token);
+          navigate("/employees");
+          setLogged(true);
+        } else {
+          console.log(
+            "data.auth: " + data.auth + " data.message: " + data.message
+          );
+          setStatus(data.auth);
+          seterrorMessage(data.message);
         }
       });
-    console.log ("Auth is " + status + " message is " + errorMessage)   
+    console.log("Auth is " + status + " message is " + errorMessage);
   }
 
   return (
@@ -71,7 +70,7 @@ function Login(props) {
         m="auto"
         component="form"
         sx={{
-          marginTop:15,
+          marginTop: 15,
           alignItems: "center",
           justifyContent: "center",
           width: "200pt",
@@ -81,7 +80,7 @@ function Login(props) {
         noValidate
         autoComplete="off"
       >
-        {!status ? <p style={{color : 'red'}}>{errorMessage}</p> : ''}
+        {!status ? <p style={{ color: "red" }}>{errorMessage}</p> : ""}
         <FormControl margin="normal">
           <InputLabel htmlFor="username">Enter Username:</InputLabel>
           <OutlinedInput

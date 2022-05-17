@@ -12,7 +12,6 @@ import ButtonAppBar from "./AppBar";
 import logo from "./logo.svg";
 import Confirmation from "./confirmation";
 
-
 function App() {
   const [isLogged, setLogged] = useState(false);
 
@@ -23,20 +22,24 @@ function App() {
     // } else {
     //   setLogged(false);
     // }
-  },[]);
-
-
+  }, []);
 
   return (
     <div className="App">
-      <ButtonAppBar state={{isLogged: [isLogged, setLogged]}}/>
+      <ButtonAppBar state={{ isLogged: [isLogged, setLogged] }} />
       <Routes>
-        <Route path="/login" element={<Login state={{isLogged: [isLogged, setLogged]}}/>} />
+        <Route
+          path="/login"
+          element={<Login state={{ isLogged: [isLogged, setLogged] }} />}
+        />
         <Route path="/registration" element={<Registration />} />
         <Route path="/employees" element={<EmployeeTable />} />
         <Route path="/employees/new" element={<EmployeeAddition />} />
         <Route path="/employees/:id" element={<EmployeeUpdate />} />
-        <Route path="/confirmation/:confirmationCode" element={<Confirmation/>}/>
+        <Route
+          path="/confirmation/:confirmationCode"
+          element={<Confirmation />}
+        />
       </Routes>
     </div>
   );
