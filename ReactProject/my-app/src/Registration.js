@@ -8,9 +8,11 @@ function Registration(){
 
   const [user,setUser] = useState({
     username:"",
-    password:""
+    password:"",
+    email:""
   })
   const [errorMessage,seterrorMessage] = useState('')
+  const [validateMessage,setvalidateMessage] = useState('')
   const [status, setStatus] = useState(false)
     
   async function handleSubmit(){
@@ -31,10 +33,12 @@ function Registration(){
     .then((data)=>{
       if(!(data.status)){
         setStatus(true);
-        seterrorMessage(data);
-        console.log(errorMessage);
+        seterrorMessage(data.message);
       }
-      else {navigate('/login')}
+      else {
+        setvalidateMessage(data.message)
+        //navigate('/login')}
+      }
     })
     
     
@@ -61,7 +65,7 @@ function Registration(){
             noValidate
             autoComplete="off"
             >   
-            {status && <p style={{color: 'red'}}>{errorMessage}</p>}
+            {status ? <p style={{color: 'red'}}>{errorMessage}</p> : <p>{validateMessage}</p>}
             <FormControl margin='normal'>
                 <InputLabel htmlFor="username">Enter Username:</InputLabel>
                 <OutlinedInput
@@ -83,6 +87,18 @@ function Registration(){
                     size='small'
                     label='Password'
                     value={user.password || ''}
+                    onChange={handleChange}
+                />
+            </FormControl>
+            <FormControl margin='normal'>
+                <InputLabel htmlFor='email'>Enter Email:</InputLabel>
+                <OutlinedInput
+                    required
+                    id="email"
+                    type='email'
+                    size='small'
+                    label='Email'
+                    value={user.email || ''}
                     onChange={handleChange}
                 />
             </FormControl>

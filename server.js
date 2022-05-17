@@ -50,7 +50,7 @@ app.get('/api/employee/:id', validateToken,db.getEmployeeById)
 app.post('/api/employee/new', validateToken,db.createEmployee)
 app.put('/api/employee/:id', validateToken,db.updateEmployee)
 app.delete('/api/employee/:id', validateToken,db.deleteEmployee)
-
+app.get('/api/confirmation/:confirmationCode', db.verifyUser)
 //JWT Login
 app.post('/api/registration', db.createUser)
 app.post('/api/login', db.loginUser)

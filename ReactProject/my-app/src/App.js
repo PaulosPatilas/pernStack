@@ -10,6 +10,7 @@ import EmployeeAddition from "./EmployeeAddition";
 import EmployeeUpdate from "./EmployeeUpdate";
 import ButtonAppBar from "./AppBar";
 import logo from "./logo.svg";
+import Confirmation from "./confirmation";
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
         <Route path="/employees" element={<EmployeeTable />} />
         <Route path="/employees/new" element={<EmployeeAddition />} />
         <Route path="/employees/:id" element={<EmployeeUpdate />} />
+        <Route path="/confirmation/:confirmationCode" element={<Confirmation/>}/>
       </Routes>
     </div>
   );
