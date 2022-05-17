@@ -70,6 +70,7 @@ function Login(props) {
         m="auto"
         component="form"
         sx={{
+          marginTop:15,
           alignItems: "center",
           justifyContent: "center",
           width: "200pt",
@@ -79,7 +80,7 @@ function Login(props) {
         noValidate
         autoComplete="off"
       >
-        {!status ? <p>{errorMessage}</p> : ''}
+        {!status ? <p style={{color : 'red'}}>{errorMessage}</p> : ''}
         <FormControl margin="normal">
           <InputLabel htmlFor="username">Enter Username:</InputLabel>
           <OutlinedInput

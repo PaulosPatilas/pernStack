@@ -104,13 +104,24 @@ const deleteEmployee = async(request, response) => {
 const createUser = async(request,response) => {    
   const {username,password} = request.body
     bcrypt.hash(password,10).then(async (hash) => { 
-      console.log(hash + "  " +password)
-      await pool.query('INSERT INTO Users VALUES($1,$2)',[username,hash],(error,results) =>{
-        if (error) {
+      //console.log(hash + "  " +password)
+      await pool.query('SELECT * FROM Users WHERE username = $1;',[username],(error,result) => {
+        if(error){
           throw error
         }
-        response.status(200).send('User added. Welcome !!')
+        if (result.rows.length > 0 ) {
+          response.status(400).json({status:false , message:'Username already exists. Try something else.'})
+        }
+        else {
+            pool.query('INSERT INTO Users VALUES($1,$2)',[username,hash],(error,results) =>{
+            if (error) {
+              throw error   
+            }
+            response.status(200).send({status: true,message:'User added. Welcome !!'})
+          })
+        } 
       })
+      
     }) 
   }
   
@@ -130,7 +141,6 @@ const loginUser = async(request,response) => {
         .then( (match) => {
           if(!match){
             response.status(400).json({auth: false, message:'Password is incorrect! Please try again'})
-            console.log("Password doesnt match")
           }
           else {
             console.log("Credential are OK!")
@@ -151,7 +161,7 @@ const loginUser = async(request,response) => {
           }
         }
       )}
-      else {response.status(400).json({auth: false, message:'no user with such username exists'})}
+      else {response.status(400).json({auth: false, message:'No user with such username exists!Maybe create one first'})}
       //response.status(200).send("User Logged In" + username + password)
     })
   }

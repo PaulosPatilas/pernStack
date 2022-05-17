@@ -120,7 +120,7 @@ function EmployeeTable() {
               WARNING
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Are you sure you want to delete this employee?
+              Are you sure you want to delete employee {employee.last_name} {employee.first_name} ? 
             </Typography>
             <Button
               variant="outlined"
@@ -175,20 +175,6 @@ function EmployeeTable() {
           <TableBody>{employeeList}</TableBody>
         </Table>
       </Container>
-      {/* <Button 
-            //className={completed ? 'App-LogOut' : null}
-            endIcon={<LogoutSharpIcon/>} 
-            style={{marginTop: 30}} 
-            variant='text' 
-            color='secondary' 
-            onClick={()=>{
-              localStorage.removeItem("token"); 
-              setLogged(false)
-            }}>
-            <Link to={'/'}>
-              LogOut
-            </Link>
-          </Button> */}
     </div>
   );
 }

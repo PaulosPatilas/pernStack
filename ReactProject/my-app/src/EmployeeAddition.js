@@ -119,7 +119,7 @@ function EmployeeAddition() {
                 /> */}
         </FormControl>
         <FormGroup>
-        <FormControl margin="small">
+        <FormControl margin="normal">
           <FormControlLabel                                   
                     id="is_active"
                     control={<Checkbox />}

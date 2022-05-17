@@ -1,15 +1,20 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {Button,FormControl, OutlinedInput, InputLabel, Box, InputAdornment } from "@mui/material"
 
 function Registration(){
+
+  const navigate = useNavigate();
 
   const [user,setUser] = useState({
     username:"",
     password:""
   })
+  const [errorMessage,seterrorMessage] = useState('')
+  const [status, setStatus] = useState(false)
     
   async function handleSubmit(){
+    setStatus(false);
     if (user.password == "" || user.username == ""){
       alert("Είναι απαραίτητο να συμπληρώσετε τα στοιχεία σας");
     }
@@ -22,6 +27,17 @@ function Registration(){
       },
       body:JSON.stringify(user)
     })
+    .then((response) =>  response.json())
+    .then((data)=>{
+      if(!(data.status)){
+        setStatus(true);
+        seterrorMessage(data);
+        console.log(errorMessage);
+      }
+      else {navigate('/login')}
+    })
+    
+    
   }}
 
   function handleChange(event)  {
@@ -35,6 +51,7 @@ function Registration(){
             margin='auto'
             component="form"
             sx={{
+              marginTop: 15,
               alignItems: 'center',
               justifyContent: 'center',
               width: '200pt',
@@ -44,7 +61,8 @@ function Registration(){
             noValidate
             autoComplete="off"
             >   
-            <FormControl margin='dense'>
+            {status && <p style={{color: 'red'}}>{errorMessage}</p>}
+            <FormControl margin='normal'>
                 <InputLabel htmlFor="username">Enter Username:</InputLabel>
                 <OutlinedInput
                     required
@@ -56,7 +74,7 @@ function Registration(){
                     margin='dense'
                 />
             </FormControl>
-            <FormControl margin='dense'>
+            <FormControl margin='normal'>
                 <InputLabel htmlFor='password'>Enter passsword:</InputLabel>
                 <OutlinedInput
                     required
@@ -68,8 +86,8 @@ function Registration(){
                     onChange={handleChange}
                 />
             </FormControl>
-            <Link to='/login'><Button variant='outlined' color="primary" form='regForm' onClick={() => handleSubmit()}>Sign Up</Button></Link>
-            <Link to='/'><Button variant='outlined' color="secondary">Cancel</Button></Link>
+            <Button style={{marginTop: 8, marginRight: 9}} variant='outlined' color="primary" form='regForm' onClick={() => handleSubmit()}>Sign Up</Button>
+            <Link style={{textDecoration:'none'}}  to='/'><Button style={{marginTop: 8}} variant='outlined' color="secondary">Cancel</Button></Link>
             </Box>           
         </form>
     </div>
