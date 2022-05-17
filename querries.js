@@ -38,6 +38,7 @@ const transport = nodemailer.createTransport({
     pass: pass,
   },
 });
+//HREF MUST CHANGE PARAMETRICALLY FOR DEV AND PROD ENVs
 const sendConfirmationEmail = (name, email, confirmationCode) => {
   console.log("Check");
   transport
@@ -48,7 +49,7 @@ const sendConfirmationEmail = (name, email, confirmationCode) => {
       html: `<h1>Email Confirmation</h1>
         <h2>Hello ${name}</h2>
         <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
-        <a href=http://localhost:3000/confirmation/${confirmationCode}> Click here</a>
+        <a href=https://pern-crud-dep.herokuapp.com/confirmation/${confirmationCode}> Click here</a>
         </div>`,
     })
     .catch((err) => console.log(err));
