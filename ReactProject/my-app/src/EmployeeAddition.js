@@ -42,7 +42,7 @@ function EmployeeAddition() {
     e.preventDefault();
 
     console.log(newEmployee.is_active);
-    if (newEmployee.first_name == "" || newEmployee.last_name == "" ){ //|| newEmployee.date_of_birth == ""
+    if (newEmployee.first_name == "" || newEmployee.last_name == "" || newEmployee.date_of_birth == ""){
       alert('Please complete the fields first')
       return;
     }
@@ -109,14 +109,6 @@ function EmployeeAddition() {
               renderInput={(params) => <TextField {...params} />}
             />
           </LocalizationProvider>
-            {/* <InputLabel htmlFor="date_of_birth">Enter Date of Birth:</InputLabel> */}
-                {/* <Input
-                    id="date_of_birth"
-                    value={newEmployee.date_of_birth?.substring(0,10) || ''}
-                    onChange={handleChange}
-                    label="date_of_birth"
-                    type="date"
-                /> */}
         </FormControl>
         <FormGroup>
         <FormControl margin="normal">
@@ -139,34 +131,6 @@ function EmployeeAddition() {
         <Button variant="outlined" color="secondary" onClick={()=>{navigate('/employees')}}>Cancel</Button>
         </ButtonGroup>
       </Box>
-      {/* <Container> 
-        <Form onSubmit={(e)=> handleSubmit(e)}>
-          <FormGroup>
-            <Label for="firstname">Firstname</Label>
-            <Input type="text" name="first_name" id="firstname" value={newEmployee.first_name || ''}
-              onChange={(e) => {handleChange(e)}} autoComplete="firstname"/>
-          </FormGroup>
-          <FormGroup>
-            <Label for="lastname">Lastname</Label>
-            <Input type="text" name="last_name" id="lastname" value={newEmployee.last_name || ''}
-              onChange={(e) => {handleChange(e)}} autoComplete="lastname"/>
-          </FormGroup>          
-          <FormGroup>
-            <Label for="age">Date of Birth</Label>
-            <Input type="date" name="date_of_birth" id="age" value={newEmployee.date_of_birth || ''}
-              onChange={(e) => {handleChange(e)}} autoComplete="age"/>
-          </FormGroup>
-          <FormGroup check inline>
-            <Label for="isActive">Active</Label>
-            <Input type="checkbox" name="is_active" id="isActive" value={true || ''}
-              onChange={() => setChecked(!checked)} autoComplete="isActive"/>
-          </FormGroup>
-          <FormGroup>
-            <Button  variant='contained' color="primary" type="submit">Add</Button>
-            <Link to={'/employees'}><Button variant='outlined' color="secondary">Cancel</Button></Link>
-          </FormGroup>
-        </Form>
-      </Container>        */}
     </div>
   )        
 }    

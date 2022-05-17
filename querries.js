@@ -3,8 +3,7 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const { sign, verify } = require("jsonwebtoken");
 require("dotenv").config();
-var moment = require("moment");
-const { response } = require("express");
+const moment = require("moment");
 //Connecting to a Postgres database from Node.js
 //In a production environment, you would want to put your configuration details
 //in a separate file with restrictive permissions that is not accessible from version control
@@ -39,7 +38,6 @@ const transport = nodemailer.createTransport({
     pass: pass,
   },
 });
-
 const sendConfirmationEmail = (name, email, confirmationCode) => {
   console.log("Check");
   transport
