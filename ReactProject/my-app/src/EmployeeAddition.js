@@ -49,11 +49,11 @@ function EmployeeAddition() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    console.log(newEmployee.is_active);
+    console.log(newEmployee.date_of_birth);
     if (
       newEmployee.first_name == "" ||
       newEmployee.last_name == "" ||
-      newEmployee.date_of_birth == ""
+      value == ""
     ) {
       alert("Please complete the fields first");
       return;
@@ -117,7 +117,7 @@ function EmployeeAddition() {
               />
             </LocalizationProvider>
           </FormControl>
-          <FormGroup>
+          <FormGroup style={{alignContent: 'center'}}>
             <FormControl margin="normal">
               <FormControlLabel
                 id="is_active"

@@ -26,6 +26,14 @@ const prodConfig = {
   // This is coming from Heroku addon for postgresql
 };
 
+if(process.env.NODE_ENV === "production"){
+  var url = "https://pern-crud-dep.herokuapp.com";
+}
+else {
+  var url = "http://localhost:3000"
+}
+
+
 //SET EMAIL VERIFICATION
 const secret = "bezkoder-secret-key";
 const user = "confirmationtest273@gmail.com";
@@ -38,8 +46,15 @@ const transport = nodemailer.createTransport({
     pass: pass,
   },
 });
+
+//CREATE POOL FOR CLIENT REQUESTS
+const Pool = require("pg").Pool;
+const pool = new Pool(
+  process.env.NODE_ENV === "production" ? prodConfig : devConfig
+);
+
 //HREF MUST CHANGE PARAMETRICALLY FOR DEV AND PROD ENVs
-const sendConfirmationEmail = (name, email, confirmationCode) => {
+const sendConfirmationEmail = (name, email, confirmationCode, url) => {
   console.log("Check");
   transport
     .sendMail({
@@ -49,17 +64,31 @@ const sendConfirmationEmail = (name, email, confirmationCode) => {
       html: `<h1>Email Confirmation</h1>
         <h2>Hello ${name}</h2>
         <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
-        <a href=https://pern-crud-dep.herokuapp.com/confirmation/${confirmationCode}> Click here</a>
+        <a href=${url}/confirmation/${confirmationCode}> Click here</a>
         </div>`,
     })
     .catch((err) => console.log(err));
 };
 
-//CREATE POOL FOR CLIENT REQUESTS
-const Pool = require("pg").Pool;
-const pool = new Pool(
-  process.env.NODE_ENV === "production" ? prodConfig : devConfig
-);
+const resentCofirmationEmail = async (request,response) => {
+  const username = request.body.username;
+
+  await pool.query('SELECT confirmationCode FROM Users WHERE username = $1',[username],(error,result)=>{
+    if(error){
+      throw error;
+    }
+    console.log(result.rows[0])
+   const confirmationCode = result.rows[0].confirmationcode
+
+    if(process.env.NODE_ENV === "production"){
+      var url = "https://pern-crud-dep.herokuapp.com";
+    }
+    else {
+      var url = "http://localhost:3000"
+    }
+   sendConfirmationEmail(username,request.body.email,confirmationCode,url);
+  });
+}
 
 //GET all employees
 const getEmployees = async (request, response) => {
@@ -174,7 +203,6 @@ const deleteEmployee = async (request, response) => {
 const createUser = async (request, response) => {
   //confirmation email token
   const token = sign({ email: request.body.email }, "jwtsecretplschange");
-
   //requests body values
   const { username, password, email } = request.body;
 
@@ -202,7 +230,7 @@ const createUser = async (request, response) => {
               }
               response
                 .status(200)
-                .send({ status: true, message: `Welcome ${username}. You need to confirm your email address first. Check your email!` });
+                .send({ status: true, message: `Welcome ${username}. You need to confirm your email address first. Check your email! If email didnt reach you, give it another try!` });
             }
           );
         }
@@ -212,7 +240,8 @@ const createUser = async (request, response) => {
   sendConfirmationEmail(
     username,
     email,
-    token
+    token,
+    url
   );
 };
 
@@ -245,7 +274,7 @@ const loginUser = async (request, response) => {
       if (error) {
         throw error;
       }
-      if (result.rows[0].status == 'pending'){
+      if (result.rows[0]?.status == 'pending'){
         response.status(400).json({auth: false, message: 'You need to confirm your email address first.'})
       }
       else if (result.rows.length > 0 && result.rows[0].status == 'active') {
@@ -303,4 +332,5 @@ module.exports = {
   updateEmployee,
   deleteEmployee,
   getEmployeeById,
+  resentCofirmationEmail
 };

@@ -9,13 +9,14 @@ import {
   InputAdornment,
 } from "@mui/material";
 
+
 function Registration() {
   const navigate = useNavigate();
 
   const [user, setUser] = useState({
     username: "",
     password: "",
-    email: "",
+    email: ""
   });
   const [errorMessage, seterrorMessage] = useState("");
   const [validateMessage, setvalidateMessage] = useState("");
@@ -37,14 +38,26 @@ function Registration() {
         .then((response) => response.json())
         .then((data) => {
           if (!data.status) {
-            setStatus(true);
+            setStatus(data.status);
             seterrorMessage(data.message);
           } else {
+            setStatus(data.status);
             setvalidateMessage(data.message);
             //navigate('/login')}
           }
         });
     }
+  }
+
+  async function handleResent(){
+    await fetch(`/api/resent`,{
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user)
+    }).then((response)=>{response.json()});
   }
 
   function handleChange(event) {
@@ -68,13 +81,17 @@ function Registration() {
           noValidate
           autoComplete="off"
         >
-          {status ? (
+          {!status && (
             <p style={{ color: "red" }}>{errorMessage}</p>
-          ) : (
-            <p>{validateMessage}</p>
+          )}     
+          {status && (
+            <div>
+              <p>{validateMessage}</p>
+              <Button onClick={()=>handleResent()}>Resent</Button>
+            </div>
           )}
           <FormControl margin="normal">
-            <InputLabel htmlFor="username">Enter Username:</InputLabel>
+            <InputLabel htmlFor="username">Username</InputLabel>
             <OutlinedInput
               required
               id="username"
@@ -86,7 +103,7 @@ function Registration() {
             />
           </FormControl>
           <FormControl margin="normal">
-            <InputLabel htmlFor="password">Enter passsword:</InputLabel>
+            <InputLabel htmlFor="password">Passsword</InputLabel>
             <OutlinedInput
               required
               id="password"
@@ -98,7 +115,7 @@ function Registration() {
             />
           </FormControl>
           <FormControl margin="normal">
-            <InputLabel htmlFor="email">Enter Email:</InputLabel>
+            <InputLabel htmlFor="email">Email</InputLabel>
             <OutlinedInput
               required
               id="email"

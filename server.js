@@ -51,10 +51,11 @@ app.post('/api/employee/new', validateToken,db.createEmployee)
 app.put('/api/employee/:id', validateToken,db.updateEmployee)
 app.delete('/api/employee/:id', validateToken,db.deleteEmployee)
 app.get('/api/confirmation/:confirmationCode', db.verifyUser)
+app.post('/api/resent',db.resentCofirmationEmail)
 //JWT Login
 app.post('/api/registration', db.createUser)
 app.post('/api/login', db.loginUser)
-app.get('/api/isUserAuth',validateToken,db.validateAuth)
+//app.get('/api/isUserAuth',validateToken,db.validateAuth)
 
 //Wildcard redirect 
 app.get('*', function(req, res) {

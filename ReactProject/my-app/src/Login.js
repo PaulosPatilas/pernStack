@@ -82,7 +82,7 @@ function Login(props) {
       >
         {!status ? <p style={{ color: "red" }}>{errorMessage}</p> : ""}
         <FormControl margin="normal">
-          <InputLabel htmlFor="username">Enter Username:</InputLabel>
+          <InputLabel htmlFor="username">Username</InputLabel>
           <OutlinedInput
             id="username"
             value={user.username || ""}
@@ -92,7 +92,7 @@ function Login(props) {
           />
         </FormControl>
         <FormControl margin="normal">
-          <InputLabel htmlFor="password">Enter passsword:</InputLabel>
+          <InputLabel htmlFor="password">Passsword</InputLabel>
           <OutlinedInput
             id="password"
             type="password"

@@ -151,10 +151,10 @@ function EmployeeUpdate() {
                     type="date"
                 /> */}
           </FormControl>
-          <FormControl>
-            <FormGroup>
+          <FormGroup style={{alignContent: 'center'}}>
+          <FormControl margin="normal" >
               {/* <FormControlLabel htmlFor="is_active">Activity</FormControlLabel>  */}
-              <FormControlLabel
+              <FormControlLabel      
                 id="is_active"
                 control={<Checkbox />}
                 labelPlacement="start"
@@ -165,8 +165,8 @@ function EmployeeUpdate() {
                 size="small"
                 checked={checked}
               />
-            </FormGroup>
-          </FormControl>
+            </FormControl>
+          </FormGroup>
         </div>
         <ButtonGroup>
           <Button
