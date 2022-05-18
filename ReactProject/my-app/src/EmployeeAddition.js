@@ -30,7 +30,7 @@ function EmployeeAddition() {
   const [newEmployee, setEmployee] = useState(emptyEmployee);
   const [checked, setChecked] = useState(false);
   const navigate = useNavigate();
-  const [value, setValue] = useState();
+  const [value, setValue] = useState("");
 
   const handleChangeDate = (newValue) => {
     setValue(newValue);

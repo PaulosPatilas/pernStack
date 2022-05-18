@@ -24,7 +24,7 @@ function Registration() {
 
   async function handleSubmit() {
     setStatus(false);
-    if (user.password == "" || user.username == "") {
+    if (user.password == "" || user.username == "" || user.email == "") {
       alert("Είναι απαραίτητο να συμπληρώσετε τα στοιχεία σας");
     } else {
       await fetch("/api/registration", {

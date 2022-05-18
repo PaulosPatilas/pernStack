@@ -33,7 +33,7 @@ function EmployeeUpdate() {
   const params = useParams();
   const navigate = useNavigate();
   //const router = useRouter();
-  const [value, setValue] = useState();
+  const [value, setValue] = useState("");
 
   const handleChangeDate = (newValue) => {
     setValue(newValue);
@@ -77,7 +77,8 @@ function EmployeeUpdate() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    if (employee.first_name == "" || employee.last_name == "") {
+    if (employee.first_name == "" || employee.last_name == "" || value == null) {
+      alert("Be sure you completed the fields first");
     } else {
       setEmployee((employee.is_active = checked));
       setEmployee((employee.date_of_birth = value));
@@ -151,10 +152,10 @@ function EmployeeUpdate() {
                     type="date"
                 /> */}
           </FormControl>
-          <FormGroup style={{alignContent: 'center'}}>
-          <FormControl margin="normal" >
+          <FormGroup style={{ alignContent: "center" }}>
+            <FormControl margin="normal">
               {/* <FormControlLabel htmlFor="is_active">Activity</FormControlLabel>  */}
-              <FormControlLabel      
+              <FormControlLabel
                 id="is_active"
                 control={<Checkbox />}
                 labelPlacement="start"
