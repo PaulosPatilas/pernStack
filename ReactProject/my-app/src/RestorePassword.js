@@ -2,6 +2,7 @@ import { OutlinedInput } from "@mui/material";
 import { InputLabel } from "@mui/material";
 import { useState } from "react";
 import { Box, Button } from "@mui/material";
+import { FormControl } from "@mui/material";
 
 function RestorePassword() {
   const [email, setEmail] = useState({ email: "" });
@@ -43,6 +44,7 @@ function RestorePassword() {
           height: 120,
         }}
       >
+          <FormControl>
         <InputLabel style={{ alignText: "left" }} htmlFor="email">
           Email
         </InputLabel>
@@ -52,6 +54,7 @@ function RestorePassword() {
           onChange={handleChange}
           label="email"
         />
+        </FormControl>
       </Box>
       <Button onClick={handleClick}>Sent</Button>
       {/* {sent && <p>{sentMessage}</p>} */}

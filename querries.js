@@ -125,6 +125,7 @@ const resetPassword = async (request, response) => {
         if (error) {
           throw error;
         }
+        response.status(200).json("Password Changed!")
       }
     );
   });
