@@ -117,7 +117,7 @@ function EmployeeAddition() {
               />
             </LocalizationProvider>
           </FormControl>
-          <FormGroup style={{alignContent: 'center'}}>
+          <FormGroup style={{ alignContent: "center" }}>
             <FormControl margin="normal">
               <FormControlLabel
                 id="is_active"

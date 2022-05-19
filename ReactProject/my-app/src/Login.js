@@ -111,6 +111,7 @@ function Login(props) {
           >
             LogIn
           </Button>
+          <Link to="/restoration">Forgot your password?</Link>
           <p>
             Not registered yet? <Link to="/registration"> Do It Now!</Link>
           </p>

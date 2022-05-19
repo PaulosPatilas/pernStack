@@ -26,13 +26,11 @@ const prodConfig = {
   // This is coming from Heroku addon for postgresql
 };
 
-if(process.env.NODE_ENV === "production"){
+if (process.env.NODE_ENV === "production") {
   var url = "https://pern-crud-dep.herokuapp.com";
+} else {
+  var url = "http://localhost:3000";
 }
-else {
-  var url = "http://localhost:3000"
-}
-
 
 //SET EMAIL VERIFICATION
 const secret = "bezkoder-secret-key";
@@ -70,25 +68,99 @@ const sendConfirmationEmail = (name, email, confirmationCode, url) => {
     .catch((err) => console.log(err));
 };
 
-const resentCofirmationEmail = async (request,response) => {
+const sendRestorationEmail = (url, confirmationCode, email) => {
+  console.log("Check2");
+  transport
+    .sendMail({
+      from: user,
+      to: email,
+      subject: "Reset your password",
+      html: `<h1>Lets create a new password for you</h1>
+        <p>You will be redirected in a new page where you will reset your password to a new one. Press the link below.</p>
+        <a href=${url}/restoration/${confirmationCode}> Click here</a>
+        </div>`,
+    })
+    .catch((err) => console.log(err));
+};
+
+const resentCofirmationEmail = (request, response) => {
   const username = request.body.username;
+  pool.query(
+    "SELECT confirmationCode FROM Users WHERE username = $1",
+    [username],
+    (error, result) => {
+      if (error) {
+        throw error;
+      }
+      console.log(result.rows[0]);
+      const confirmationCode = result.rows[0].confirmationcode;
 
-  await pool.query('SELECT confirmationCode FROM Users WHERE username = $1',[username],(error,result)=>{
-    if(error){
-      throw error;
+      if (process.env.NODE_ENV === "production") {
+        var url = "https://pern-crud-dep.herokuapp.com";
+      } else {
+        var url = "http://localhost:3000";
+      }
+      sendConfirmationEmail(
+        username,
+        request.body.email,
+        confirmationCode,
+        url
+      );
     }
-    console.log(result.rows[0])
-   const confirmationCode = result.rows[0].confirmationcode
+  );
+};
 
-    if(process.env.NODE_ENV === "production"){
-      var url = "https://pern-crud-dep.herokuapp.com";
-    }
-    else {
-      var url = "http://localhost:3000"
-    }
-   sendConfirmationEmail(username,request.body.email,confirmationCode,url);
+//THELEI DOULITSA EINAI NULL STHN VASH
+const resetPassword = async (request, response) => {
+  const code = request.params.confirmationcode;
+  const password = request.body[0]; // alakse to type tou body kai einai array pleon ?!?!?!?
+  console.log(code);
+  console.log(request.body[0]);
+  console.log(password);
+  bcrypt.hash(password, 10).then(async (hash) => {
+    await pool.query(
+      "UPDATE Users SET password = $1 WHERE confirmationcode = $2",
+      [hash, code],
+      (error, result) => {
+        if (error) {
+          throw error;
+        }
+      }
+    );
   });
-}
+};
+
+const restorePassword = (request, response) => {
+  console.log("Restore Password");
+  const email = JSON.parse(JSON.stringify(request.body));
+  console.log(request.body[0] + "   " + email);
+  pool.query(
+    `SELECT confirmationcode FROM users WHERE email = '${email}'`,
+
+    (error, result) => {
+      console.log("query is working...");
+      if (error) {
+        throw error;
+      }
+      console.log("query is still working..." + result.rows[0]);
+      if (result.rows.length > 0) {
+        console.log("query DONE");
+        if (process.env.NODE_ENV === "production") {
+          console.log("we are in prod");
+          var url = "https://pern-crud-dep.herokuapp.com";
+        } else {
+          console.log("dev time");
+          var url = "http://localhost:3000";
+        }
+        sendRestorationEmail(url, result.rows[0].confirmationcode, email);
+        response.status(200).json("Email has been sent!");
+      } else {
+        response.status(400).json(result.rows);
+      }
+      console.log();
+    }
+  );
+};
 
 //GET all employees
 const getEmployees = async (request, response) => {
@@ -228,56 +300,61 @@ const createUser = async (request, response) => {
               if (error) {
                 throw error;
               }
-              response
-                .status(200)
-                .send({ status: true, message: `Welcome ${username}. You need to confirm your email address first. Check your email! If email didnt reach you, give it another try!` });
+              response.status(200).send({
+                status: true,
+                message: `Welcome ${username}. You need to confirm your email address first. Check your email! If email didnt reach you, give it another try!`,
+              });
             }
           );
         }
       }
     );
   });
-  sendConfirmationEmail(
-    username,
-    email,
-    token,
-    url
-  );
+  sendConfirmationEmail(username, email, token, url);
 };
 
-const verifyUser = async (request,response) => {
-  console.log('wait...')
-  confirmationCode = request.params.confirmationCode
-  await pool.query('SELECT * FROM Users WHERE confirmationCode = $1' , [confirmationCode], (error,result) => {
-    if (error) {
-      throw error; 
+const verifyUser = async (request, response) => {
+  console.log("wait...");
+  confirmationCode = request.params.confirmationCode;
+  await pool.query(
+    "SELECT * FROM Users WHERE confirmationCode = $1",
+    [confirmationCode],
+    (error, result) => {
+      if (error) {
+        throw error;
+      }
+      if (result.rows.length > 0) {
+        pool.query(
+          "UPDATE Users SET status = 'active' WHERE confirmationCode = $1;",
+          [confirmationCode],
+          (error) => {
+            if (error) {
+              throw error;
+            }
+          }
+        );
+      }
     }
-    if (result.rows.length > 0 ) {
-      pool.query("UPDATE Users SET status = 'active' WHERE confirmationCode = $1;", [confirmationCode],(error)=>{
-        if (error) {
-          throw error;
-        }
-      });
-    } 
-  }
   );
-}
+};
 
 const loginUser = async (request, response) => {
   const { username, password } = request.body;
   // AND status = 'active'
   await pool.query(
-    "SELECT * FROM Users WHERE username = $1 ;", 
+    "SELECT * FROM Users WHERE username = $1 ;",
     [username],
     (error, result) => {
       console.log("Query executing...");
       if (error) {
         throw error;
       }
-      if (result.rows[0]?.status == 'pending'){
-        response.status(400).json({auth: false, message: 'You need to confirm your email address first.'})
-      }
-      else if (result.rows.length > 0 && result.rows[0].status == 'active') {
+      if (result.rows[0]?.status == "pending") {
+        response.status(400).json({
+          auth: false,
+          message: "You need to confirm your email address first.",
+        });
+      } else if (result.rows.length > 0 && result.rows[0].status == "active") {
         const dbPass = result.rows[0].password;
         bcrypt.compare(password, dbPass).then((match) => {
           if (!match) {
@@ -332,5 +409,7 @@ module.exports = {
   updateEmployee,
   deleteEmployee,
   getEmployeeById,
-  resentCofirmationEmail
+  resentCofirmationEmail,
+  restorePassword,
+  resetPassword,
 };

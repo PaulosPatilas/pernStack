@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import EmployeeRow from "./EmployeeRow";
 import DeleteIcon from "@mui/icons-material/Delete";
-import LogoutSharpIcon from "@mui/icons-material/LogoutSharp";
 import EditIcon from "@mui/icons-material/Edit";
 import {
   Table,
@@ -10,7 +9,6 @@ import {
   TableRow,
   TableBody,
   TableCell,
-  ButtonGroup,
   Button,
   Box,
   Modal,
@@ -19,7 +17,7 @@ import {
 import { Stack } from "@mui/material";
 import "./EmployeeTable.css";
 import { Container } from "@mui/material";
-import { NoEncryption } from "@mui/icons-material";
+
 
 function EmployeeTable() {
   const [employees, setEmployees] = useState([]);

@@ -9,6 +9,8 @@ import EmployeeTable from "./EmployeeTable";
 import EmployeeAddition from "./EmployeeAddition";
 import EmployeeUpdate from "./EmployeeUpdate";
 import ButtonAppBar from "./AppBar";
+import RestorePassword from "./RestorePassword";
+import ResetPassword from "./ResetPassword";
 import logo from "./logo.svg";
 import Confirmation from "./confirmation";
 
@@ -39,6 +41,11 @@ function App() {
         <Route
           path="/confirmation/:confirmationCode"
           element={<Confirmation />}
+        />
+        <Route path="/restoration" element={<RestorePassword />} />
+        <Route
+          path="/restoration/:confirmationCode"
+          element={<ResetPassword />}
         />
       </Routes>
     </div>
