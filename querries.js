@@ -143,7 +143,6 @@ const restorePassword = (request, response) => {
       if (error) {
         throw error;
       }
-      console.log("query is still working..." + result.rows[0]);
       if (result.rows.length > 0) {
         console.log("query DONE");
         if (process.env.NODE_ENV === "production") {
@@ -154,9 +153,9 @@ const restorePassword = (request, response) => {
           var url = "http://localhost:3000";
         }
         sendRestorationEmail(url, result.rows[0].confirmationcode, email);
-        response.status(200).json("Email has been sent!");
+        response.status(200).json({message:"Email has been sent!"});
       } else {
-        response.status(400).json(result.rows);
+        response.status(400).json({message:"Something went wrong!"});
       }
       console.log();
     }

@@ -1,14 +1,13 @@
 import { FormControl } from "@mui/material";
 import { Box, InputLabel, OutlinedInput, Button } from "@mui/material";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 function ResetPassword() {
-  const [passwords, setPassword] = useState({
-    password: "",
-    _password: "",
-  });
+  
+  const [passwords, setPassword] = useState([]);
   const params = useParams();
+  const navigate = useNavigate();
 
   function handleChange(e) {
     setPassword({ ...passwords, [e.target.id]: [e.target.value] });
@@ -17,13 +16,13 @@ function ResetPassword() {
   //SKAEI H IF
   async function handleClick() {
     const code = params.confirmationCode;
-    const pass = passwords.password;
-    const _pass = passwords._password;
-    console.log(passwords.password + " " + passwords._password);
+    const pass = passwords.password[0];
+    const _pass = passwords._password[0];
+    console.log(passwords);
     if (pass == "" || _pass == "") {
       alert("Complete the fields first");
     } else {
-      if (pass == _pass) {
+      if (pass != _pass) {
         alert("The passwords are diferent...");
       } else {
         await fetch(`/api/restore/${code}`, {
@@ -34,6 +33,7 @@ function ResetPassword() {
           },
           body: JSON.stringify(passwords.password),
         });
+        navigate("/login");
       }
     }
   }

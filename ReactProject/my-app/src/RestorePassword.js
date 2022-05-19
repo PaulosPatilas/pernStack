@@ -23,11 +23,13 @@ function RestorePassword() {
           accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(email),
-      }).then((response) => {
-        setSent(true);
-        setsentMessage(response.json());
-      });
+        body: JSON.stringify(email)
+      })
+        .then((response) => response.json())
+        .then((data) => {
+            setSent(true);
+            setsentMessage(data.message);
+        });
     }
   }
 
@@ -44,20 +46,20 @@ function RestorePassword() {
           height: 120,
         }}
       >
-          <FormControl>
-        <InputLabel style={{ alignText: "left" }} htmlFor="email">
-          Email
-        </InputLabel>
-        <OutlinedInput
-          id="email"
-          value={email.email}
-          onChange={handleChange}
-          label="email"
-        />
+        <FormControl>
+          <InputLabel style={{ alignText: "left" }} htmlFor="email">
+            Email
+          </InputLabel>
+          <OutlinedInput
+            id="email"
+            value={email.email}
+            onChange={handleChange}
+            label="email"
+          />
         </FormControl>
       </Box>
       <Button onClick={handleClick}>Sent</Button>
-      {/* {sent && <p>{sentMessage}</p>} */}
+      {sent && <p>{sentMessage}</p>}
     </div>
   );
 }
