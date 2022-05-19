@@ -110,7 +110,7 @@ const resentCofirmationEmail = (request, response) => {
   );
 };
 
-//THELEI DOULITSA EINAI NULL STHN VASH
+//THELW NA ALLAKSW TO PARSING
 const resetPassword = async (request, response) => {
   const code = request.params.confirmationcode;
   const password = request.body[0]; // alakse to type tou body kai einai array pleon ?!?!?!?
@@ -133,16 +133,16 @@ const resetPassword = async (request, response) => {
 
 const restorePassword = (request, response) => {
   console.log("Restore Password");
-  const email = JSON.parse(JSON.stringify(request.body));
+  const email = request.body.email
   console.log(request.body[0] + "   " + email);
   pool.query(
     `SELECT confirmationcode FROM users WHERE email = '${email}'`,
-
     (error, result) => {
       console.log("query is working...");
       if (error) {
         throw error;
       }
+      console.log(result);
       if (result.rows.length > 0) {
         console.log("query DONE");
         if (process.env.NODE_ENV === "production") {

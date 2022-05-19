@@ -1,16 +1,20 @@
-import { OutlinedInput } from "@mui/material";
-import { InputLabel } from "@mui/material";
+import {
+  OutlinedInput,
+  Input,
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
 import { useState } from "react";
-import { Box, Button } from "@mui/material";
-import { FormControl } from "@mui/material";
 
 function RestorePassword() {
-  const [email, setEmail] = useState({ email: "" });
+  const [email, setEmail] = useState([]);
   const [sent, setSent] = useState(false);
   const [sentMessage, setsentMessage] = useState("");
 
   function handleChange(e) {
-    setEmail(([e.target.id] = [e.target.value]));
+    setEmail({...email,[e.target.id]:[e.target.value]});
   }
 
   async function handleClick() {
@@ -23,12 +27,12 @@ function RestorePassword() {
           accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(email)
+        body: JSON.stringify(email),
       })
         .then((response) => response.json())
         .then((data) => {
-            setSent(true);
-            setsentMessage(data.message);
+          setSent(true);
+          setsentMessage(data.message);
         });
     }
   }
@@ -51,6 +55,7 @@ function RestorePassword() {
             Email
           </InputLabel>
           <OutlinedInput
+            required
             id="email"
             value={email.email}
             onChange={handleChange}
