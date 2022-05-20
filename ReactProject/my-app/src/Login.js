@@ -5,7 +5,7 @@ import {
   FormControl,
   OutlinedInput,
   InputLabel,
-  Box,
+  Box
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LoginSharpIcon from "@mui/icons-material/LoginSharp";
@@ -35,8 +35,9 @@ function Login(props) {
     setUser({ ...user, [event.target.id]: event.target.value });
   };
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("submiting")
     await fetch("/api/login", {
       method: "POST",
       headers: {
@@ -66,6 +67,7 @@ function Login(props) {
 
   return (
     <div>
+      <form onSubmit={handleSubmit}>
       <Box
         m="auto"
         component="form"
@@ -73,7 +75,7 @@ function Login(props) {
           marginTop: 15,
           alignItems: "center",
           justifyContent: "center",
-          width: "200pt",
+          width: "170pt",
           height: "400pt",
           "& .MuiTextField-root": { p: 5, m: 1, width: "15ch" },
         }}
@@ -92,7 +94,7 @@ function Login(props) {
           />
         </FormControl>
         <FormControl margin="normal">
-          <InputLabel htmlFor="password">Passsword</InputLabel>
+          <InputLabel htmlFor="password">Password</InputLabel>
           <OutlinedInput
             id="password"
             type="password"
@@ -104,6 +106,7 @@ function Login(props) {
         </FormControl>
         <FormGroup margin="normal">
           <Button
+            type="submit"
             variant="contained"
             startIcon={<LoginSharpIcon />}
             color="primary"
@@ -117,6 +120,7 @@ function Login(props) {
           </p>
         </FormGroup>
       </Box>
+      </form>
     </div>
   );
 }

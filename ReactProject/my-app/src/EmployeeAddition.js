@@ -46,7 +46,7 @@ function EmployeeAddition() {
     }
   });
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     console.log(newEmployee.date_of_birth);
@@ -69,72 +69,82 @@ function EmployeeAddition() {
           "content-type": "application/json",
         },
         body: JSON.stringify(newEmployee),
-      });
-      navigate("/employees");
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          alert(data.message);
+          //setStatus(data.status)
+          if (data.status) {
+            navigate("/employees");
+          }
+        });
     }
-  }
+  };
 
   return (
     <div>
       <h1 style={{ textAlign: "center", font: 14 }}>Add new Employee</h1>
-      <Box
-        m="auto"
-        sx={{
-          width: 200,
-          height: 400,
-        }}
-      >
-        <div>
-          <FormControl margin="normal">
-            <InputLabel htmlFor="last_name">Enter Last Name:</InputLabel>
-            <Input
-              id="last_name"
-              value={newEmployee.last_name || ""}
-              onChange={handleChange}
-              label="last_name"
-              size="small"
-            />
-          </FormControl>
-          <FormControl margin="normal">
-            <InputLabel htmlFor="first_name">Enter First Name:</InputLabel>
-            <Input
-              id="first_name"
-              value={newEmployee.first_name || ""}
-              onChange={handleChange}
-              label="first_name"
-              size="small"
-            />
-          </FormControl>
-          <FormControl margin="normal" size="normal">
-            <LocalizationProvider dateAdapter={AdapterMoment}>
-              <DesktopDatePicker
-                id="date_of_birth"
-                label="Date of Birth"
-                inputFormat="DD-MM-YYYY"
-                value={value || ""}
-                onChange={handleChangeDate}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
-          </FormControl>
-          <FormGroup style={{ alignContent: "center" }}>
+      <form onSubmit={handleSubmit}>
+        <Box
+          m="auto"
+          sx={{
+            width: 200,
+            height: 400,
+          }}
+        >
+          <div>
             <FormControl margin="normal">
-              <FormControlLabel
-                id="is_active"
-                control={<Checkbox />}
-                labelPlacement="start"
-                label="Activity"
-                value={newEmployee.is_active}
-                onChange={(event) => setChecked(event.target.checked)}
-                name="is_active"
+              <InputLabel htmlFor="last_name">Enter Last Name:</InputLabel>
+              <Input
+                id="last_name"
+                value={newEmployee.last_name || ""}
+                onChange={handleChange}
+                label="last_name"
                 size="small"
-                checked={checked}
               />
             </FormControl>
-          </FormGroup>
-        </div>
-        <ButtonGroup>
+            <FormControl margin="normal">
+              <InputLabel htmlFor="first_name">Enter First Name:</InputLabel>
+              <Input
+                id="first_name"
+                value={newEmployee.first_name || ""}
+                onChange={handleChange}
+                label="first_name"
+                size="small"
+              />
+            </FormControl>
+            <FormControl margin="normal" size="normal">
+              <LocalizationProvider dateAdapter={AdapterMoment}>
+                <DesktopDatePicker
+                  id="date_of_birth"
+                  label="Date of Birth"
+                  inputFormat="DD-MM-YYYY"
+                  value={value || ""}
+                  onChange={handleChangeDate}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            </FormControl>
+            <FormGroup style={{ alignContent: "flex-start" }}>
+              <FormControl margin="normal">
+                <FormControlLabel
+                  id="is_active"
+                  control={<Checkbox />}
+                  labelPlacement="start"
+                  label="Activity"
+                  value={newEmployee.is_active}
+                  onChange={(event) => setChecked(event.target.checked)}
+                  name="is_active"
+                  size="small"
+                  checked={checked}
+                />
+              </FormControl>
+            </FormGroup>
+          </div>
+
           <Button
+            type=""
+            style={{ marginRight: 38 }}
             variant="contained"
             color="primary"
             onClick={(e) => handleSubmit(e)}
@@ -150,8 +160,8 @@ function EmployeeAddition() {
           >
             Cancel
           </Button>
-        </ButtonGroup>
-      </Box>
+        </Box>
+      </form>
     </div>
   );
 }

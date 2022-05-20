@@ -13,7 +13,7 @@ function ResetPassword() {
     setPassword({ ...passwords, [e.target.id]: [e.target.value] });
   }
 
-  //SKAEI H IF
+  
   async function handleClick() {
     const code = params.confirmationCode;
     const pass = passwords.password[0];

@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { UserContext } from "./UserContext";
 import { Button } from "@mui/material";
@@ -16,15 +16,22 @@ import Confirmation from "./confirmation";
 
 function App() {
   const [isLogged, setLogged] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    localStorage.removeItem("token");
+    if((localStorage.getItem("token"))){
+      navigate('/employees')
+    }
+    else {
+      navigate('/login')
+    }
+    //localStorage.removeItem("token");
     // if (localStorage.getItem("token") !== null) {
     //   setLogged(true);
     // } else {
     //   setLogged(false);
     // }
-  }, []);
+  },[]);
 
   return (
     <div className="App">

@@ -17,7 +17,8 @@ function RestorePassword() {
     setEmail({...email,[e.target.id]:[e.target.value]});
   }
 
-  async function handleClick() {
+   const handleSubmit = async (e) => {
+     e.preventDefault()
     if (email.email == "") {
       alert("Please give us your email first");
     } else {
@@ -38,11 +39,12 @@ function RestorePassword() {
   }
 
   return (
-    <div>
+    <div style={{textAlign:'center'}}>
       <header>
         <h4>Did you forget your password?</h4>
       </header>
       <p>We will restore it for you. Just enter your email</p>
+      <form onSubmit={handleSubmit}>
       <Box
         m="auto"
         sx={{
@@ -63,8 +65,9 @@ function RestorePassword() {
           />
         </FormControl>
       </Box>
-      <Button onClick={handleClick}>Sent</Button>
+      <Button type="submit" onClick={handleSubmit}>Sent</Button>
       {sent && <p>{sentMessage}</p>}
+      </form>
     </div>
   );
 }

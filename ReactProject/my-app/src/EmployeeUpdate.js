@@ -55,7 +55,7 @@ function EmployeeUpdate() {
         setValue(result[0].date_of_birth);
       });
   }
-
+  //const id = params.id;
   useEffect(() => {
     if (localStorage.getItem("token") == null) {
       navigate("/");
@@ -65,16 +65,20 @@ function EmployeeUpdate() {
 
       console.log("DONE");
     }
-  }, []);
+  }, [params.id]);
 
   function handleChange(event) {
     setEmployee({ ...employee, [event.target.id]: event.target.value });
   }
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (employee.first_name == "" || employee.last_name == "" || value == null) {
+    if (
+      employee.first_name == "" ||
+      employee.last_name == "" ||
+      value == null
+    ) {
       alert("Be sure you completed the fields first");
     } else {
       setEmployee((employee.is_active = checked));
@@ -89,58 +93,65 @@ function EmployeeUpdate() {
           "content-type": "application/json",
         },
         body: JSON.stringify(employee),
-      });
-      navigate("/employees");
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          alert(data.message);
+          if (data.status) {
+            navigate("/employees");
+          }
+        });
     }
-  }
+  };
 
   return (
     <div>
       <h1 style={{ textAlign: "center", font: 14 }}>
         Edit {employee.first_name} {employee.last_name} Profile!
       </h1>
-
-      <Box
-        m="auto"
-        sx={{
-          width: 200,
-          height: 400,
-        }}
-      >
-        <div>
-          <FormControl margin="normal">
-            <InputLabel htmlFor="last_name">Enter Last Name:</InputLabel>
-            <Input
-              id="last_name"
-              value={employee.last_name}
-              onChange={handleChange}
-              label="last_name"
-              size="small"
-            />
-          </FormControl>
-          <FormControl margin="normal">
-            <InputLabel htmlFor="first_name">Enter First Name:</InputLabel>
-            <Input
-              id="first_name"
-              value={employee.first_name}
-              onChange={handleChange}
-              label="first_name"
-              size="small"
-            />
-          </FormControl>
-          <FormControl margin="normal" size="normal">
-            <LocalizationProvider dateAdapter={AdapterMoment}>
-              <DesktopDatePicker
-                id="date_of_birth"
-                label="Date of Birth"
-                inputFormat="DD-MM-YYYY"
-                value={value}
-                onChange={handleChangeDate}
-                renderInput={(params) => <TextField {...params} />}
+      <form onSubmit={handleSubmit}>
+        <Box
+          m="auto"
+          sx={{
+            width: 200,
+            height: 400,
+          }}
+        >
+          <div>
+            <FormControl margin="normal">
+              <InputLabel htmlFor="last_name">Enter Last Name:</InputLabel>
+              <Input
+                id="last_name"
+                value={employee.last_name || ""}
+                onChange={handleChange}
+                label="last_name"
+                size="small"
               />
-            </LocalizationProvider>
-            {/* <InputLabel htmlFor="date_of_birth">Enter Date of Birth:</InputLabel> */}
-            {/* <Input
+            </FormControl>
+            <FormControl margin="normal">
+              <InputLabel htmlFor="first_name">Enter First Name:</InputLabel>
+              <Input
+                id="first_name"
+                value={employee.first_name || ""}
+                onChange={handleChange}
+                label="first_name"
+                size="small"
+              />
+            </FormControl>
+            <FormControl margin="normal" size="normal">
+              <LocalizationProvider dateAdapter={AdapterMoment}>
+                <DesktopDatePicker
+                  id="date_of_birth"
+                  label="Date of Birth"
+                  inputFormat="DD-MM-YYYY"
+                  value={value}
+                  onChange={handleChangeDate}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+              {/* <InputLabel htmlFor="date_of_birth">Enter Date of Birth:</InputLabel> */}
+              {/* <Input
                     id="date_of_birth"
                     value={moment(new Date(employee.date_of_birth?.substring(0,10))).format('DD-MM-YYYY')}
                     //placeholder='dd-mm-yyyy
@@ -148,26 +159,28 @@ function EmployeeUpdate() {
                     label="date_of_birth"                    
                     type="date"
                 /> */}
-          </FormControl>
-          <FormGroup style={{ alignContent: "center" }}>
-            <FormControl margin="normal">
-              {/* <FormControlLabel htmlFor="is_active">Activity</FormControlLabel>  */}
-              <FormControlLabel
-                id="is_active"
-                control={<Checkbox />}
-                labelPlacement="start"
-                label="Activity"
-                value={employee.is_active}
-                onChange={(event) => setChecked(event.target.checked)}
-                name="is_active"
-                size="small"
-                checked={checked}
-              />
             </FormControl>
-          </FormGroup>
-        </div>
-        <ButtonGroup>
+            <FormGroup style={{ alignContent: "flex-start" }}>
+              <FormControl margin="normal">
+                {/* <FormControlLabel htmlFor="is_active">Activity</FormControlLabel>  */}
+                <FormControlLabel
+                  id="is_active"
+                  control={<Checkbox />}
+                  labelPlacement="start"
+                  label="Activity"
+                  value={employee.is_active}
+                  onChange={(event) => setChecked(event.target.checked)}
+                  name="is_active"
+                  size="small"
+                  checked={checked}
+                />
+              </FormControl>
+            </FormGroup>
+          </div>
+
           <Button
+            type="submit"
+            style={{ marginRight: 38 }}
             variant="contained"
             color="primary"
             onClick={(e) => handleSubmit(e)}
@@ -183,8 +196,8 @@ function EmployeeUpdate() {
           >
             Cancel
           </Button>
-        </ButtonGroup>
-      </Box>
+        </Box>
+      </form>
     </div>
   );
 }

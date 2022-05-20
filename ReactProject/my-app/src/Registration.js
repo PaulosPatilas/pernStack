@@ -8,7 +8,7 @@ import {
   Box,
   InputAdornment,
 } from "@mui/material";
-
+import { FormGroup } from "@mui/material";
 
 function Registration() {
   const navigate = useNavigate();
@@ -16,13 +16,14 @@ function Registration() {
   const [user, setUser] = useState({
     username: "",
     password: "",
-    email: ""
+    email: "",
   });
   const [errorMessage, seterrorMessage] = useState("");
   const [validateMessage, setvalidateMessage] = useState("");
   const [status, setStatus] = useState(false);
 
-  async function handleSubmit() {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setStatus(false);
     if (user.password == "" || user.username == "" || user.email == "") {
       alert("Είναι απαραίτητο να συμπληρώσετε τα στοιχεία σας");
@@ -47,17 +48,19 @@ function Registration() {
           }
         });
     }
-  }
+  };
 
-  async function handleResent(){
-    await fetch(`/api/resent`,{
+  async function handleResent() {
+    await fetch(`/api/resent`, {
       method: "POST",
       headers: {
         accept: "application/json",
         "content-type": "application/json",
       },
-      body: JSON.stringify(user)
-    }).then((response)=>{response.json()});
+      body: JSON.stringify(user),
+    }).then((response) => {
+      response.json();
+    });
   }
 
   function handleChange(event) {
@@ -66,7 +69,7 @@ function Registration() {
 
   return (
     <div>
-      <form id="regForm">
+      <form onSubmit={handleSubmit}>
         <Box
           margin="auto"
           component="form"
@@ -81,13 +84,11 @@ function Registration() {
           noValidate
           autoComplete="off"
         >
-          {!status && (
-            <p style={{ color: "red" }}>{errorMessage}</p>
-          )}     
+          {!status && <p style={{ color: "red" }}>{errorMessage}</p>}
           {status && (
             <div>
               <p>{validateMessage}</p>
-              <Button onClick={()=>handleResent()}>Resent</Button>
+              <Button onClick={() => handleResent()}>Resent</Button>
             </div>
           )}
           <FormControl margin="normal">
@@ -126,24 +127,27 @@ function Registration() {
               onChange={handleChange}
             />
           </FormControl>
-          <Button
-            style={{ marginTop: 8, marginRight: 9 }}
-            variant="outlined"
-            color="primary"
-            form="regForm"
-            onClick={() => handleSubmit()}
-          >
-            Sign Up
-          </Button>
-          <Link style={{ textDecoration: "none" }} to="/">
+          <FormGroup>
             <Button
-              style={{ marginTop: 8 }}
+              type="submit"
+              style={{ marginTop: 8, marginRight: 38 }}
               variant="outlined"
-              color="secondary"
+              color="primary"
+              //form="regForm"
+              onClick={(e) => handleSubmit(e)}
             >
-              Cancel
+              Sign Up
             </Button>
-          </Link>
+            <Link style={{ textDecoration: "none" }} to="/">
+              <Button
+                style={{ marginTop: 8 }}
+                variant="outlined"
+                color="secondary"
+              >
+                Cancel
+              </Button>
+            </Link>
+          </FormGroup>
         </Box>
       </form>
     </div>

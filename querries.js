@@ -125,7 +125,7 @@ const resetPassword = async (request, response) => {
         if (error) {
           throw error;
         }
-        response.status(200).json("Password Changed!")
+        response.status(200).json("Password Changed!");
       }
     );
   });
@@ -133,7 +133,7 @@ const resetPassword = async (request, response) => {
 
 const restorePassword = (request, response) => {
   console.log("Restore Password");
-  const email = request.body.email
+  const email = request.body.email;
   console.log(request.body[0] + "   " + email);
   pool.query(
     `SELECT confirmationcode FROM users WHERE email = '${email}'`,
@@ -153,9 +153,9 @@ const restorePassword = (request, response) => {
           var url = "http://localhost:3000";
         }
         sendRestorationEmail(url, result.rows[0].confirmationcode, email);
-        response.status(200).json({message:"Email has been sent!"});
+        response.status(200).json({ message: "Email has been sent!" });
       } else {
-        response.status(400).json({message:"Something went wrong!"});
+        response.status(400).json({ message: "Something went wrong!" });
       }
       console.log();
     }
@@ -198,63 +198,72 @@ const getEmployeeById = async (request, response) => {
 
 //POST a new employee
 const createEmployee = async (request, response) => {
-  //We create the body of the request(what we will Post)
   const { last_name, first_name, is_active, date_of_birth } = request.body;
-  console.log(request);
-  const user_id = request.userID.id;
-  console.log(
-    "Our date " +
-      date_of_birth +
-      " was converted to " +
-      moment.utc(date_of_birth).format("MM-DD-YYYY")
-  );
-  await pool.query(
-    "INSERT INTO Employee (last_name, first_name, is_active, date_of_birth, user_id) VALUES ($1, $2, $3, $4, $5)",
-    [
-      last_name,
-      first_name,
-      is_active,
-      moment.utc(date_of_birth).format("MM-DD-YYYY"),
-      user_id,
-    ],
-    (error, results) => {
-      if (error) {
-        throw error;
+  console.log(last_name.length);
+  if (last_name.length > 50) {
+    response
+      .status(400)
+      .json({ status: false, message: "Last name is too big" });
+  } else if (first_name.length > 50) {
+    response
+      .status(400)
+      .json({ status: false, message: "First name is too big" });
+  } else {
+    const user_id = request.userID.id;
+    await pool.query(
+      "INSERT INTO Employee (last_name, first_name, is_active, date_of_birth, user_id) VALUES ($1, $2, $3, $4, $5)",
+      [
+        last_name,
+        first_name,
+        is_active,
+        moment.utc(date_of_birth).format("MM-DD-YYYY"),
+        user_id,
+      ],
+      (error, results) => {
+        if (error) {
+          throw error;
+        }
+        response.status(201).json({ status: true, message: "User added" });
       }
-      response.status(201).send(`User added with ID: ${response.insertId}`);
-    }
-  );
+    );
+  }
 };
 
-//UPDATE an existing Employee
+//UPDATE an existing Employee params.id = undefioned
 const updateEmployee = async (request, response) => {
-  const id = parseInt(request.params.id);
-  console.log(id);
   const { last_name, first_name, is_active, date_of_birth } = request.body;
-  const user_id = request.userID.id;
-  console.log(
-    "Our date " +
-      date_of_birth +
-      " was converted to " +
-      moment.utc(date_of_birth).format("YYYY-MM-DD")
-  );
-  await pool.query(
-    "UPDATE Employee SET last_name = $1, first_name = $2, is_active = $3, date_of_birth = $4 WHERE id = $5 AND user_id = $6",
-    [
-      last_name,
-      first_name,
-      is_active,
-      moment(date_of_birth).format("MM-DD-YYYY"),
-      id,
-      user_id,
-    ],
-    (error, results) => {
-      if (error) {
-        throw error;
+
+  if (last_name.length > 50) {
+    response
+      .status(400)
+      .json({ status: false, message: "Last name is too big" });
+  } else if (first_name.length > 50) {
+    response
+      .status(400)
+      .json({ status: false, message: "First name is too big" });
+  } else {
+    const user_id = request.userID.id;
+    const id = parseInt(request.params.id);
+    console.log(request.params);
+    console.log(id + "  " + user_id);
+    await pool.query(
+      "UPDATE Employee SET last_name = $1, first_name = $2, is_active = $3, date_of_birth = $4 WHERE id = $5 AND user_id = $6",
+      [
+        last_name,
+        first_name,
+        is_active,
+        moment(date_of_birth).format("MM-DD-YYYY"),
+        id,
+        user_id,
+      ],
+      (error, results) => {
+        if (error) {
+          throw error;
+        }
+        response.status(200).json({ status: true, message: "User modified" });
       }
-      response.status(200).send(`User modified with ID: ${id}` + request.body);
-    }
-  );
+    );
+  }
 };
 //DELETE an Employee
 const deleteEmployee = async (request, response) => {
@@ -278,38 +287,44 @@ const createUser = async (request, response) => {
   //requests body values
   const { username, password, email } = request.body;
 
-  bcrypt.hash(password, 10).then(async (hash) => {
-    //console.log(hash + "  " +password)
-    await pool.query(
-      "SELECT * FROM Users WHERE username = $1;",
-      [username],
-      (error, result) => {
-        if (error) {
-          throw error;
-        }
-        if (result.rows.length > 0) {
-          response.status(400).json({
-            status: false,
-            message: "Username already exists. Try something else.",
-          });
-        } else {
-          pool.query(
-            "INSERT INTO Users (username,password,email,confirmationcode) VALUES($1,$2,$3,$4);",
-            [username, hash, email, token],
-            (error, results) => {
-              if (error) {
-                throw error;
+  if (username.length > 50) {
+    response
+      .status(400)
+      .json({ status: false, message: "Username must have 50 chars maximum" });
+  } else {
+    bcrypt.hash(password, 10).then(async (hash) => {
+      //console.log(hash + "  " +password)
+      await pool.query(
+        "SELECT * FROM Users WHERE username = $1;",
+        [username],
+        (error, result) => {
+          if (error) {
+            throw error;
+          }
+          if (result.rows.length > 0) {
+            response.status(400).json({
+              status: false,
+              message: "Username already exists. Try something else.",
+            });
+          } else {
+            pool.query(
+              "INSERT INTO Users (username,password,email,confirmationcode) VALUES($1,$2,$3,$4);",
+              [username, hash, email, token],
+              (error, results) => {
+                if (error) {
+                  throw error;
+                }
+                response.status(200).send({
+                  status: true,
+                  message: `Welcome ${username}. You need to confirm your email address first. Check your email! If email didnt reach you, give it another try!`,
+                });
               }
-              response.status(200).send({
-                status: true,
-                message: `Welcome ${username}. You need to confirm your email address first. Check your email! If email didnt reach you, give it another try!`,
-              });
-            }
-          );
+            );
+          }
         }
-      }
-    );
-  });
+      );
+    });
+  }
   sendConfirmationEmail(username, email, token, url);
 };
 

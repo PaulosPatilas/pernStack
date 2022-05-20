@@ -18,7 +18,6 @@ import { Stack } from "@mui/material";
 import "./EmployeeTable.css";
 import { Container } from "@mui/material";
 
-
 function EmployeeTable() {
   const [employees, setEmployees] = useState([]);
   const [open, setOpen] = useState(false);
@@ -112,44 +111,45 @@ function EmployeeTable() {
               </Link>
             </Button>
           </Stack>
+          <Modal
+            open={open}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                WARNING
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                Are you sure you want to delete employee {employee.last_name}{" "}
+                {employee.first_name} ?
+              </Typography>
+              <Button
+                variant="outlined"
+                color="secondary"
+                style={{ marginLeft: 20, marginTop: 30 }}
+                onClick={() => {
+                  console.log(employee);
+                  handleDeleteClick(employee.id);
+                }}
+              >
+                {" "}
+                Yes{" "}
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                style={{ marginLeft: 200, marginTop: 30 }}
+                onClick={() => {
+                  setOpen(false);
+                }}
+              >
+                {" "}
+                No{" "}
+              </Button>
+            </Box>
+          </Modal>{" "}
         </TableRow>
-        <Modal
-          open={open}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              WARNING
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Are you sure you want to delete employee {employee.last_name}{" "}
-              {employee.first_name} ?
-            </Typography>
-            <Button
-              variant="outlined"
-              color="secondary"
-              style={{ marginLeft: 20, marginTop: 30 }}
-              onClick={() => {
-                handleDeleteClick(employee.id);
-              }}
-            >
-              {" "}
-              Yes{" "}
-            </Button>
-            <Button
-              variant="outlined"
-              color="secondary"
-              style={{ marginLeft: 200, marginTop: 30 }}
-              onClick={() => {
-                setOpen(false);
-              }}
-            >
-              {" "}
-              No{" "}
-            </Button>
-          </Box>
-        </Modal>{" "}
       </>
     );
   });
