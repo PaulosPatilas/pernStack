@@ -121,7 +121,7 @@ const resetPassword = async (request, response) => {
     await pool.query(
       "UPDATE Users SET password = $1 WHERE confirmationcode = $2",
       [hash, code],
-      (error, result) => {
+      (error) => {
         if (error) {
           throw error;
         }
@@ -155,7 +155,9 @@ const restorePassword = (request, response) => {
         sendRestorationEmail(url, result.rows[0].confirmationcode, email);
         response.status(200).json({ message: "Email has been sent!" });
       } else {
-        response.status(400).json({ message: "Something went wrong!" });
+        response
+          .status(400)
+          .json({ message: "Something went wrong! Try again please!" });
       }
       console.log();
     }
@@ -234,17 +236,17 @@ const updateEmployee = async (request, response) => {
   const { last_name, first_name, is_active, date_of_birth } = request.body;
 
   if (last_name.length > 50) {
-    response
-      .status(400)
-      .json({ status: false, message: "Last name is too big" });
+    console.log(parseInt(request.params));
+    response.json({ status: false, message: "Last name is too big" });
   } else if (first_name.length > 50) {
+    console.log(parseInt(request.params));
     response
       .status(400)
       .json({ status: false, message: "First name is too big" });
   } else {
     const user_id = request.userID.id;
-    const id = parseInt(request.params.id);
     console.log(request.params);
+    const id = parseInt(request.params.id);
     console.log(id + "  " + user_id);
     await pool.query(
       "UPDATE Employee SET last_name = $1, first_name = $2, is_active = $3, date_of_birth = $4 WHERE id = $5 AND user_id = $6",
@@ -308,16 +310,32 @@ const createUser = async (request, response) => {
             });
           } else {
             pool.query(
-              "INSERT INTO Users (username,password,email,confirmationcode) VALUES($1,$2,$3,$4);",
-              [username, hash, email, token],
-              (error, results) => {
+              "SELECT * FROM Users WHERE email = $1;",
+              [email],
+              (error, result) => {
                 if (error) {
                   throw error;
                 }
-                response.status(200).send({
-                  status: true,
-                  message: `Welcome ${username}. You need to confirm your email address first. Check your email! If email didnt reach you, give it another try!`,
-                });
+                if (result.rows.length > 0) {
+                  response.status(400).json({
+                    status: false,
+                    message: "Account already exists.",
+                  });
+                } else {
+                  pool.query(
+                    "INSERT INTO Users (username,password,email,confirmationcode) VALUES($1,$2,$3,$4);",
+                    [username, hash, email, token],
+                    (error, results) => {
+                      if (error) {
+                        throw error;
+                      }
+                      response.status(200).send({
+                        status: true,
+                        message: `Welcome ${username}. You need to confirm your email address first. Check your email! If email didnt reach you, give it another try!`,
+                      });
+                    }
+                  );
+                }
               }
             );
           }

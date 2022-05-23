@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { UserContext } from "./UserContext";
 import { Button } from "@mui/material";
@@ -11,32 +11,33 @@ import EmployeeUpdate from "./EmployeeUpdate";
 import ButtonAppBar from "./AppBar";
 import RestorePassword from "./RestorePassword";
 import ResetPassword from "./ResetPassword";
-import logo from "./logo.svg";
 import Confirmation from "./confirmation";
+import { AppBar } from "@mui/material";
 
 function App() {
-  const [isLogged, setLogged] = useState(false);
+  const [isLogged, setLogged] = useState();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    if((localStorage.getItem("token"))){
-      navigate('/employees')
+    if (localStorage.getItem("token")) {
+      setLogged(true);
+    } 
+    else if(!(localStorage.getItem("babino")) && !(localStorage.getItem("vasilakos"))){
+      navigate("/login")
     }
-    else {
-      navigate('/login')
-    }
-    //localStorage.removeItem("token");
-    // if (localStorage.getItem("token") !== null) {
-    //   setLogged(true);
-    // } else {
-    //   setLogged(false);
+    // else {
+    //   //setLogged(false);
+    //   console.log(location.pathname)
+    //   navigate("/login");
     // }
-  },[]);
+  }, [isLogged]);
 
   return (
     <div className="App">
       <ButtonAppBar state={{ isLogged: [isLogged, setLogged] }} />
       <Routes>
+        <Route path="/" element={<AppBar />} />
         <Route
           path="/login"
           element={<Login state={{ isLogged: [isLogged, setLogged] }} />}

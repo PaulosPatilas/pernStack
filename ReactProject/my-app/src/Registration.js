@@ -138,7 +138,7 @@ function Registration() {
             >
               Sign Up
             </Button>
-            <Link style={{ textDecoration: "none" }} to="/">
+            <Link style={{ textDecoration: "none" }} to="/login">
               <Button
                 style={{ marginTop: 8 }}
                 variant="outlined"

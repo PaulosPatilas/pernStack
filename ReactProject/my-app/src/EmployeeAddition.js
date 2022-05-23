@@ -42,7 +42,7 @@ function EmployeeAddition() {
 
   useEffect(() => {
     if (localStorage.getItem("token") == null) {
-      navigate("/");
+      navigate("/login");
     }
   });
 

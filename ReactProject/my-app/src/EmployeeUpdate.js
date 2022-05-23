@@ -55,17 +55,14 @@ function EmployeeUpdate() {
         setValue(result[0].date_of_birth);
       });
   }
-  //const id = params.id;
+  
   useEffect(() => {
     if (localStorage.getItem("token") == null) {
-      navigate("/");
-    } else {
-      const id = params.id;
-      getEmployee(id);
-
-      console.log("DONE");
+      navigate("/login");
+    } else {    
+      getEmployee(params.id);
     }
-  }, [params.id]);
+  },[employee.id]);
 
   function handleChange(event) {
     setEmployee({ ...employee, [event.target.id]: event.target.value });
@@ -84,6 +81,7 @@ function EmployeeUpdate() {
       setEmployee((employee.is_active = checked));
       setEmployee((employee.date_of_birth = value));
       console.log(employee);
+      console.log(employee.id);
       await fetch(`/api/employee/${employee.id}`, {
         //mode:'cors',
         method: "PUT",

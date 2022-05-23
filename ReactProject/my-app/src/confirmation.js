@@ -5,10 +5,13 @@ import { Link, useParams } from "react-router-dom";
 function Confirmation(props) {
   const params = useParams();
   const confirmationCode = params.confirmationCode;
+
   useEffect(() => {
+    localStorage.setItem("vasilakos",params.confirmationCode);
     fetch(`/api/confirmation/${confirmationCode}`).then((response) => {
       response.json();
     });
+    //localStorage.removeItem("vasilakos")
   }, []);
   return (
     <Container>
@@ -17,7 +20,7 @@ function Confirmation(props) {
           <strong>Account confirmed!</strong>
         </h3>
       </header>
-      <Link to={"/login"}>Please Login</Link>
+      <Link onClick={()=>{localStorage.removeItem("vasilakos")}} to={"/login"}>Please Login</Link>
     </Container>
   );
 }

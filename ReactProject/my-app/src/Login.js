@@ -7,12 +7,10 @@ import {
   InputLabel,
   Box
 } from "@mui/material";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LoginSharpIcon from "@mui/icons-material/LoginSharp";
-import PasswordIcon from "@mui/icons-material/Password";
 import { Link, useNavigate } from "react-router-dom";
 import "./App.css";
-import { grey } from "@mui/material/colors";
+
 
 function Login(props) {
   const [user, setUser] = useState({
@@ -29,7 +27,11 @@ function Login(props) {
 
   const navigate = useNavigate();
 
-  //const  _setUser  = useContext(UserContext);
+  useEffect(()=>{
+    if(localStorage.getItem("token")){
+      navigate("/employees")
+    }
+  },[])
 
   const handleChange = (event) => {
     setUser({ ...user, [event.target.id]: event.target.value });
@@ -66,7 +68,6 @@ function Login(props) {
   }
 
   return (
-    <div>
       <form onSubmit={handleSubmit}>
       <Box
         m="auto"
@@ -121,7 +122,7 @@ function Login(props) {
         </FormGroup>
       </Box>
       </form>
-    </div>
+    
   );
 }
 

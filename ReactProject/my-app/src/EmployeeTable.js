@@ -20,6 +20,7 @@ import { Container } from "@mui/material";
 
 function EmployeeTable() {
   const [employees, setEmployees] = useState([]);
+  const [employee, setEmployee] = useState([]);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -41,7 +42,7 @@ function EmployeeTable() {
       localStorage.getItem("token") == null ||
       localStorage.getItem("token") == undefined
     ) {
-      navigate("/");
+      navigate("/login");
     } else {
       fetch("api/employees", {
         headers: {
@@ -57,8 +58,9 @@ function EmployeeTable() {
     }
   }, []);
 
-  function handleClose() {
-    setOpen();
+  function handleShow(employee) {
+    setOpen(true);
+    setEmployee(employee);
   }
 
   async function handleDeleteClick(id) {
@@ -98,57 +100,23 @@ function EmployeeTable() {
               startIcon={<DeleteIcon />}
               variant="outlined"
               color="secondary"
-              onClick={() => setOpen(true)}
+              onClick={() => handleShow(employee)}
             >
               Delete
             </Button>
-            <Button color="primary" variant="outlined" startIcon={<EditIcon />}>
-              <Link
-                style={{ textDecoration: "none" }}
-                to={"/employees/" + employee.id}
+            <Link
+              style={{ textDecoration: "none" }}
+              to={"/employees/" + employee.id}
+            >
+              <Button
+                color="primary"
+                variant="outlined"
+                startIcon={<EditIcon />}
               >
                 Editor
-              </Link>
-            </Button>
+              </Button>
+            </Link>
           </Stack>
-          <Modal
-            open={open}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={style}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                WARNING
-              </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Are you sure you want to delete employee {employee.last_name}{" "}
-                {employee.first_name} ?
-              </Typography>
-              <Button
-                variant="outlined"
-                color="secondary"
-                style={{ marginLeft: 20, marginTop: 30 }}
-                onClick={() => {
-                  console.log(employee);
-                  handleDeleteClick(employee.id);
-                }}
-              >
-                {" "}
-                Yes{" "}
-              </Button>
-              <Button
-                variant="outlined"
-                color="secondary"
-                style={{ marginLeft: 200, marginTop: 30 }}
-                onClick={() => {
-                  setOpen(false);
-                }}
-              >
-                {" "}
-                No{" "}
-              </Button>
-            </Box>
-          </Modal>{" "}
         </TableRow>
       </>
     );
@@ -178,6 +146,44 @@ function EmployeeTable() {
           </TableHead>
           <TableBody>{employeeList}</TableBody>
         </Table>
+        <Modal
+          open={open}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              WARNING
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Are you sure you want to delete employee {employee.last_name}{" "}
+              {employee.first_name} ?
+            </Typography>
+            <Button
+              variant="outlined"
+              color="secondary"
+              style={{ marginLeft: 20, marginTop: 30 }}
+              onClick={() => {
+                console.log(employee);
+                handleDeleteClick(employee.id);
+              }}
+            >
+              {" "}
+              Yes{" "}
+            </Button>
+            <Button
+              variant="outlined"
+              color="secondary"
+              style={{ marginLeft: 200, marginTop: 30 }}
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              {" "}
+              No{" "}
+            </Button>
+          </Box>
+        </Modal>{" "}
       </Container>
     </div>
   );
